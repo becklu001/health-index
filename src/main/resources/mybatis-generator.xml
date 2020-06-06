@@ -1,0 +1,125 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE generatorConfiguration
+        PUBLIC "-//mybatis.org//DTD MyBatis Generator Configuration 1.0//EN"
+        "http://mybatis.org/dtd/mybatis-generator-config_1_0.dtd">
+<generatorConfiguration>
+
+    <!--id 无所谓， targetRuntime用默认的-->
+    <context id="DB2Tables" targetRuntime="MyBatis3">
+        <commentGenerator>
+            <property name="suppressAllComments" value="true" />
+        </commentGenerator>
+        <!-- 配置数据库连接 -->
+        <jdbcConnection driverClass="com.mysql.jdbc.Driver"
+                        connectionURL="jdbc:mysql://127.0.0.1:3306/device_health_monitor"
+                        userId="root"
+                        password="root">
+        </jdbcConnection>
+
+        <!--默认false:把JDBC DECIMAL 和 NUMERIC类型解析为Integer;-->
+        <!--true:把JDBC DECIMAL 和 NUMERIC类型解析为java.math.BigDecimal-->
+        <javaTypeResolver>
+            <property name="forceBigDecimals" value="true" />
+        </javaTypeResolver>
+
+        <!-- 指定DataObject生成的位置 -->
+        <javaModelGenerator targetPackage="com.ht.healthindex.dataobject"
+                            targetProject="src/main/java">
+            <property name="enableSubPackages" value="true" />
+            <property name="trimStrings" value="true" />
+        </javaModelGenerator>
+
+        <!--指定sql映射文件生成的位置 -->
+        <sqlMapGenerator targetPackage="mapper" targetProject="src/main/resources">
+            <property name="enableSubPackages" value="true" />
+        </sqlMapGenerator>
+
+        <!-- 指定dao接口生成的位置，mapper接口 -->
+        <javaClientGenerator type="XMLMAPPER"
+                             targetPackage="com.ht.healthindex.dao" targetProject="src/main/java">
+            <property name="enableSubPackages" value="true" />
+        </javaClientGenerator>
+
+         <!--table指定每个表的生成策略 -->
+<!--        <table tableName="user" domainObjectName="UserDO"
+        enableCountByExample="false"
+        enableUpdateByExample="false"
+        enableDeleteByExample="false"
+        enableSelectByExample="false"></table>
+        <table tableName="user_password" domainObjectName="UserPasswordDO"
+        enableCountByExample="false"
+        enableUpdateByExample="false"
+        enableDeleteByExample="false"
+        enableSelectByExample="false"></table>-->
+<!--        <table tableName="item" domainObjectName="ItemDO"
+        enableCountByExample="false"
+        enableUpdateByExample="false"
+        enableDeleteByExample="false"
+        enableSelectByExample="false"></table>
+        <table tableName="item_stock" domainObjectName="ItemStockDO"
+        enableCountByExample="false"
+        enableUpdateByExample="false"
+        enableDeleteByExample="false"
+        enableSelectByExample="false"></table>-->
+<!--        <table tableName="order_info" domainObjectName="OrderDO"
+        enableCountByExample="false"
+        enableUpdateByExample="false"
+        enableDeleteByExample="false"
+        enableSelectByExample="false"></table>-->
+<!--        <table tableName="sequence" domainObjectName="SequenceDO"
+        enableCountByExample="false"
+        enableUpdateByExample="false"
+        enableDeleteByExample="false"
+        enableSelectByExample="false"></table>-->
+<!--        <table tableName="device_info" domainObjectName="DeviceInfoDO"
+               enableCountByExample="false"
+               enableUpdateByExample="false"
+               enableDeleteByExample="false"
+               enableSelectByExample="false"></table>    -->
+<!--        <table tableName="t_app_history_alarm" domainObjectName="HistoryAlarmDO"
+               enableCountByExample="false"
+               enableUpdateByExample="false"
+               enableDeleteByExample="false"
+               enableSelectByExample="false"></table> -->
+        <table tableName="param_weight_config" domainObjectName="ParamWeightConfigDO"
+               enableCountByExample="false"
+               enableUpdateByExample="false"
+               enableDeleteByExample="false"
+               enableSelectByExample="false"></table>
+<!--        <table tableName="skylight_record" domainObjectName="SkylightRecordDO"
+               enableCountByExample="false"
+               enableUpdateByExample="false"
+               enableDeleteByExample="false"
+               enableSelectByExample="false"></table>-->
+<!--        <table tableName="manual_adjust_record" domainObjectName="ManualAdjustRecordDO"
+               enableCountByExample="false"
+               enableUpdateByExample="false"
+               enableDeleteByExample="false"
+               enableSelectByExample="false"></table>-->
+<!--        <table tableName="device_info" domainObjectName="DeviceInfoDO"
+               enableCountByExample="false"
+               enableUpdateByExample="false"
+               enableDeleteByExample="false"
+               enableSelectByExample="false"></table>-->
+<!--        <table tableName="single_device_health_index" domainObjectName="HealthIndexByTypeDO"
+               enableCountByExample="false"
+               enableUpdateByExample="false"
+               enableDeleteByExample="false"
+               enableSelectByExample="false"></table>-->
+<!--        <table tableName="device_type_health_index" domainObjectName="DeviceTypeHIDO"
+               enableCountByExample="false"
+               enableUpdateByExample="false"
+               enableDeleteByExample="false"
+               enableSelectByExample="false"></table>-->
+<!--        <table tableName="station_info" domainObjectName="StationInfoDO"
+               enableCountByExample="false"
+               enableUpdateByExample="false"
+               enableDeleteByExample="false"
+               enableSelectByExample="false"></table>-->
+<!--        <table tableName="station_health_index" domainObjectName="StationHIDO"
+               enableCountByExample="false"
+               enableUpdateByExample="false"
+               enableDeleteByExample="false"
+               enableSelectByExample="false"></table>-->
+    </context>
+</generatorConfiguration>

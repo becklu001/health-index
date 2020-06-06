@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <!--<link  rel="stylesheet"  href="../common/layui/css/layui.css" >-->
+
+    <link rel="stylesheet" href="layui/css/layui.css" />
+    <script type="text/javascript" src="layui/layui.js" ></script>
+    <style>
+        #listDeviceInfoTable{
+
+        }
+    </style>
+</head>
+<body>
+    <table id="listDeviceInfoTable"></table>
+</body>
+
+<script>
+    layui.use(['jquery','form','table','layer'],function () {
+        var table = layui.table,layer = layui.layer,$ = layui.jquery,form = layui.form;
+        var baseUrl = "/device";
+
+        var deviceInfoList = table.render({
+            elem: '#listDeviceInfoTable'
+            ,id:'listDeviceInfoTable'
+            ,height:400
+            ,method:'get'
+
+//            数据接口url
+            ,url:'/device/listDeviceInfo'
+            ,page:{limit:30}
+            ,request:{
+                pageName:'page'
+                ,limitName:'number'
+            }
+
+            ,parseData:function (res) {
+//                data-----page
+                console.log(res);
+                return {
+                    "code":"000"
+                    ,"msg": res.status
+                    ,"count": res.data.total
+                    ,"data": res.data.list
+                }
+            }
+
+            ,cols: [
+                [
+                    {type:'numbers', fixed: 'left', width:60},
+
+                    ,{field: 'uid', hide:true}
+                    ,{field: 'id', title: 'ID', width:120,align: 'center'}
+                    ,{field: 'deviceName', title: '设备名称', width:120,align: 'center'}
+                    ,{field: 'stationId', title: '车站ID', width:120,align: 'center'}
+                    ,{field: 'deviceType', title: '设备类型', width:120,align: 'center'}
+                    ,{field: 'attachSystem', title: '归属系统', width:120,align: 'center'}
+
+                    ,{fixed: 'right', width: 280,field: 'toolbar', title: '操作',align: 'center', templet: "#barDemo"}
+                ]
+            ]
+
+        });
+    });
+</script>
+
+</html>

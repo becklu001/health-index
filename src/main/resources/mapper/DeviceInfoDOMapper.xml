@@ -1,0 +1,155 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ht.healthindex.dao.DeviceInfoDOMapper">
+  <resultMap id="BaseResultMap" type="com.ht.healthindex.dataobject.DeviceInfoDO">
+    <id column="id" jdbcType="INTEGER" property="id" />
+    <result column="device_name" jdbcType="VARCHAR" property="deviceName" />
+    <result column="station_id" jdbcType="INTEGER" property="stationId" />
+    <result column="device_type" jdbcType="VARCHAR" property="deviceType" />
+    <result column="produce_date" jdbcType="DATE" property="produceDate" />
+    <result column="inuse_date" jdbcType="DATE" property="inuseDate" />
+    <result column="perspect_life" jdbcType="INTEGER" property="perspectLife" />
+  </resultMap>
+
+  <resultMap id="StationNameResultMap" type="com.ht.healthindex.service.model.DeviceInfoModel">
+    <id column="id" jdbcType="INTEGER" property="id" />
+    <result column="device_name" jdbcType="VARCHAR" property="deviceName" />
+    <result column="station_id" jdbcType="INTEGER" property="stationId" />
+    <result column="station_name" jdbcType="VARCHAR" property="stationName" />
+    <result column="device_type" jdbcType="VARCHAR" property="deviceType" />
+    <result column="produce_date" jdbcType="DATE" property="produceDate" />
+    <result column="inuse_date" jdbcType="DATE" property="inuseDate" />
+    <result column="perspect_life" jdbcType="INTEGER" property="perspectLife" />
+  </resultMap>
+
+  <sql id="Base_Column_List">
+    id, device_name, station_id, device_type, produce_date, inuse_date, perspect_life
+  </sql>
+
+  <sql id="Base_Column_List_With_Station_Name">
+    device_info.id, device_name, station_id, station_info.station_name,device_type, produce_date, inuse_date, perspect_life
+  </sql>
+
+  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from device_info
+    where id = #{id,jdbcType=INTEGER}
+  </select>
+
+  <select id="listDeviceInfo" resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List" />
+    from device_info
+  </select>
+
+  <select id="listDeviceInfoModel" resultMap="StationNameResultMap">
+    select
+    <include refid="Base_Column_List_With_Station_Name" />
+    from device_info
+    LEFT JOIN station_info ON device_info.station_id = station_info.id
+  </select>
+
+  <select id="listDeviceInfoByStationId" resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List" />
+    from device_info
+    where station_id = #{stationId,jdbcType=INTEGER}
+  </select>
+
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    delete from device_info
+    where id = #{id,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="com.ht.healthindex.dataobject.DeviceInfoDO">
+    insert into device_info (id, device_name, station_id, 
+      device_type, produce_date, inuse_date, 
+      perspect_life)
+    values (#{id,jdbcType=INTEGER}, #{deviceName,jdbcType=VARCHAR}, #{stationId,jdbcType=INTEGER}, 
+      #{deviceType,jdbcType=VARCHAR}, #{produceDate,jdbcType=DATE}, #{inuseDate,jdbcType=DATE}, 
+      #{perspectLife,jdbcType=INTEGER})
+  </insert>
+  <insert id="insertSelective" parameterType="com.ht.healthindex.dataobject.DeviceInfoDO">
+    insert into device_info
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        id,
+      </if>
+      <if test="deviceName != null">
+        device_name,
+      </if>
+      <if test="stationId != null">
+        station_id,
+      </if>
+      <if test="deviceType != null">
+        device_type,
+      </if>
+      <if test="produceDate != null">
+        produce_date,
+      </if>
+      <if test="inuseDate != null">
+        inuse_date,
+      </if>
+      <if test="perspectLife != null">
+        perspect_life,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        #{id,jdbcType=INTEGER},
+      </if>
+      <if test="deviceName != null">
+        #{deviceName,jdbcType=VARCHAR},
+      </if>
+      <if test="stationId != null">
+        #{stationId,jdbcType=INTEGER},
+      </if>
+      <if test="deviceType != null">
+        #{deviceType,jdbcType=VARCHAR},
+      </if>
+      <if test="produceDate != null">
+        #{produceDate,jdbcType=DATE},
+      </if>
+      <if test="inuseDate != null">
+        #{inuseDate,jdbcType=DATE},
+      </if>
+      <if test="perspectLife != null">
+        #{perspectLife,jdbcType=INTEGER},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.ht.healthindex.dataobject.DeviceInfoDO">
+    update device_info
+    <set>
+      <if test="deviceName != null">
+        device_name = #{deviceName,jdbcType=VARCHAR},
+      </if>
+      <if test="stationId != null">
+        station_id = #{stationId,jdbcType=INTEGER},
+      </if>
+      <if test="deviceType != null">
+        device_type = #{deviceType,jdbcType=VARCHAR},
+      </if>
+      <if test="produceDate != null">
+        produce_date = #{produceDate,jdbcType=DATE},
+      </if>
+      <if test="inuseDate != null">
+        inuse_date = #{inuseDate,jdbcType=DATE},
+      </if>
+      <if test="perspectLife != null">
+        perspect_life = #{perspectLife,jdbcType=INTEGER},
+      </if>
+    </set>
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.ht.healthindex.dataobject.DeviceInfoDO">
+    update device_info
+    set device_name = #{deviceName,jdbcType=VARCHAR},
+      station_id = #{stationId,jdbcType=INTEGER},
+      device_type = #{deviceType,jdbcType=VARCHAR},
+      produce_date = #{produceDate,jdbcType=DATE},
+      inuse_date = #{inuseDate,jdbcType=DATE},
+      perspect_life = #{perspectLife,jdbcType=INTEGER}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+</mapper>

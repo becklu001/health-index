@@ -1,0 +1,217 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ht.healthindex.dao.DeviceTypeHIDOMapper">
+  <resultMap id="BaseResultMap" type="com.ht.healthindex.dataobject.DeviceTypeHIDO">
+    <id column="id" jdbcType="INTEGER" property="id" />
+    <result column="station_id" jdbcType="INTEGER" property="stationId" />
+    <result column="station_name" jdbcType="VARCHAR" property="stationName" />
+    <result column="device_type" jdbcType="VARCHAR" property="deviceType" />
+    <result column="health_index" jdbcType="DECIMAL" property="healthIndex" />
+    <result column="healthy_count" jdbcType="INTEGER" property="healthyCount" />
+    <result column="subhealthy_count" jdbcType="INTEGER" property="subhealthyCount" />
+    <result column="abnormal_count" jdbcType="INTEGER" property="abnormalCount" />
+    <result column="morbid_count" jdbcType="INTEGER" property="morbidCount" />
+    <result column="error_count" jdbcType="INTEGER" property="errorCount" />
+    <result column="create_date" jdbcType="TIMESTAMP" property="createDate" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    id, station_id, station_name, device_type, health_index, healthy_count, subhealthy_count, 
+    abnormal_count, morbid_count, error_count, create_date
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from device_type_health_index
+    where id = #{id,jdbcType=INTEGER}
+  </select>
+
+  <select id="listDeviceTypeHILatestByCondition" parameterType="com.ht.healthindex.dataobject.DeviceTypeHIDO" resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List" />
+    from
+    <trim prefix="(" suffix=")">
+      select
+      <include refid="Base_Column_List" />
+      from device_type_health_index
+      <where>
+        <if test="id != null">
+          id = #{Id,jdbcType=INTEGER}
+        </if>
+        <if test="stationId != null">
+          and station_id = #{stationId,jdbcType=INTEGER}
+        </if>
+        <if test="stationName != null">
+          and station_name = #{stationName,jdbcType=VARCHAR}
+        </if>
+        <if test="deviceType != null">
+          and device_type = #{deviceType,jdbcType=VARCHAR}
+        </if>
+        <if test="healthIndex != null">
+          and health_index = #{healthIndex,jdbcType=DECIMAL}
+        </if>
+        <if test="healthyCount != null">
+          and healthy_count = #{healthyCount,jdbcType=INTEGER}
+        </if>
+        <if test="subhealthyCount != null">
+          and subhealthy_count = #{subhealthyCount,jdbcType=INTEGER}
+        </if>
+        <if test="abnormalCount != null">
+          and abnormal_count = #{abnormalCount,jdbcType=INTEGER}
+        </if>
+        <if test="morbidCount != null">
+          and morbid_count = #{morbidCount,jdbcType=INTEGER}
+        </if>
+        <if test="errorCount != null">
+          and error_count = #{errorCount,jdbcType=INTEGER}
+        </if>
+        <if test="createDate != null">
+          and create_date >= #{createDate,jdbcType=TIMESTAMP}
+          and to_days(create_date)-to_days(#{createDate,jdbcType=TIMESTAMP}) &lt;= 1
+        </if>
+      </where>
+
+      order by create_date desc
+      limit 10000
+    </trim>
+    as temp_table group by temp_table.device_type
+  </select>
+
+
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    delete from device_type_health_index
+    where id = #{id,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="com.ht.healthindex.dataobject.DeviceTypeHIDO">
+    insert into device_type_health_index (id, station_id, station_name, 
+      device_type, health_index, healthy_count, 
+      subhealthy_count, abnormal_count, morbid_count, 
+      error_count, create_date)
+    values (#{id,jdbcType=INTEGER}, #{stationId,jdbcType=INTEGER}, #{stationName,jdbcType=VARCHAR}, 
+      #{deviceType,jdbcType=VARCHAR}, #{healthIndex,jdbcType=DECIMAL}, #{healthyCount,jdbcType=INTEGER}, 
+      #{subhealthyCount,jdbcType=INTEGER}, #{abnormalCount,jdbcType=INTEGER}, #{morbidCount,jdbcType=INTEGER}, 
+      #{errorCount,jdbcType=INTEGER}, #{createDate,jdbcType=TIMESTAMP})
+  </insert>
+  <insert id="insertSelective" parameterType="com.ht.healthindex.dataobject.DeviceTypeHIDO">
+    insert into device_type_health_index
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        id,
+      </if>
+      <if test="stationId != null">
+        station_id,
+      </if>
+      <if test="stationName != null">
+        station_name,
+      </if>
+      <if test="deviceType != null">
+        device_type,
+      </if>
+      <if test="healthIndex != null">
+        health_index,
+      </if>
+      <if test="healthyCount != null">
+        healthy_count,
+      </if>
+      <if test="subhealthyCount != null">
+        subhealthy_count,
+      </if>
+      <if test="abnormalCount != null">
+        abnormal_count,
+      </if>
+      <if test="morbidCount != null">
+        morbid_count,
+      </if>
+      <if test="errorCount != null">
+        error_count,
+      </if>
+      <if test="createDate != null">
+        create_date,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        #{id,jdbcType=INTEGER},
+      </if>
+      <if test="stationId != null">
+        #{stationId,jdbcType=INTEGER},
+      </if>
+      <if test="stationName != null">
+        #{stationName,jdbcType=VARCHAR},
+      </if>
+      <if test="deviceType != null">
+        #{deviceType,jdbcType=VARCHAR},
+      </if>
+      <if test="healthIndex != null">
+        #{healthIndex,jdbcType=DECIMAL},
+      </if>
+      <if test="healthyCount != null">
+        #{healthyCount,jdbcType=INTEGER},
+      </if>
+      <if test="subhealthyCount != null">
+        #{subhealthyCount,jdbcType=INTEGER},
+      </if>
+      <if test="abnormalCount != null">
+        #{abnormalCount,jdbcType=INTEGER},
+      </if>
+      <if test="morbidCount != null">
+        #{morbidCount,jdbcType=INTEGER},
+      </if>
+      <if test="errorCount != null">
+        #{errorCount,jdbcType=INTEGER},
+      </if>
+      <if test="createDate != null">
+        #{createDate,jdbcType=TIMESTAMP},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.ht.healthindex.dataobject.DeviceTypeHIDO">
+    update device_type_health_index
+    <set>
+      <if test="stationId != null">
+        station_id = #{stationId,jdbcType=INTEGER},
+      </if>
+      <if test="stationName != null">
+        station_name = #{stationName,jdbcType=VARCHAR},
+      </if>
+      <if test="deviceType != null">
+        device_type = #{deviceType,jdbcType=VARCHAR},
+      </if>
+      <if test="healthIndex != null">
+        health_index = #{healthIndex,jdbcType=DECIMAL},
+      </if>
+      <if test="healthyCount != null">
+        healthy_count = #{healthyCount,jdbcType=INTEGER},
+      </if>
+      <if test="subhealthyCount != null">
+        subhealthy_count = #{subhealthyCount,jdbcType=INTEGER},
+      </if>
+      <if test="abnormalCount != null">
+        abnormal_count = #{abnormalCount,jdbcType=INTEGER},
+      </if>
+      <if test="morbidCount != null">
+        morbid_count = #{morbidCount,jdbcType=INTEGER},
+      </if>
+      <if test="errorCount != null">
+        error_count = #{errorCount,jdbcType=INTEGER},
+      </if>
+      <if test="createDate != null">
+        create_date = #{createDate,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.ht.healthindex.dataobject.DeviceTypeHIDO">
+    update device_type_health_index
+    set station_id = #{stationId,jdbcType=INTEGER},
+      station_name = #{stationName,jdbcType=VARCHAR},
+      device_type = #{deviceType,jdbcType=VARCHAR},
+      health_index = #{healthIndex,jdbcType=DECIMAL},
+      healthy_count = #{healthyCount,jdbcType=INTEGER},
+      subhealthy_count = #{subhealthyCount,jdbcType=INTEGER},
+      abnormal_count = #{abnormalCount,jdbcType=INTEGER},
+      morbid_count = #{morbidCount,jdbcType=INTEGER},
+      error_count = #{errorCount,jdbcType=INTEGER},
+      create_date = #{createDate,jdbcType=TIMESTAMP}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+</mapper>

@@ -1,0 +1,974 @@
+<!DOCTYPE html>
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <!--<link  rel="stylesheet"  href="../common/layui/css/layui.css" >-->
+
+    <link rel="stylesheet" href="layui/css/layui.css" />
+    <script type="text/javascript" src="layui/layui.js" ></script>
+    <script src="https://how2j.cn/study/js/chartjs/2.8.0/chart.min.js"></script>
+
+    <style>
+        #topPanel{
+            width: auto;
+            height: 300px;
+            /*border: 1px solid red;*/
+        }
+        #topLeftPanel{
+            width: 600px;
+            /*height: 300px;*/
+            float: left;
+            /*background: yellow;*/
+            /*border: 1px solid yellow;*/
+        }
+        .cakeDiv {
+            display: none;
+        }
+
+        #centerPanel{
+            width: 140px;
+            height:300px;
+            background: #c6c6c6;
+            /*margin: 0 auto;*/
+            float: left;
+        }
+        .color-style{
+            margin-top: 15px;
+            margin-left: 20px;
+        }
+
+        .color-line{
+            width: 50px;
+            height:20px;
+        }
+
+        #topRightPanel{
+            width: 600px;
+            height: 300px;
+            float: right;
+            /*background: deepskyblue;*/
+        }
+        #listHealthIndexTable{
+
+        }
+        #inline1{
+            margin-bottom: 0px;
+        }
+        #addDeviceBtn,#weightConfigBtn{
+            height: 32px;
+        }
+
+    </style>
+</head>
+<body>
+    <div id="topPanel">
+        <div id="topLeftPanel">
+            <div >
+                <div class = "cakeDiv" id="guidaoDiv"style="width: 150px;height: 150px;float: left;">
+                    <canvas  class="cakeCanvas" id="轨道电路" width="100" height="100">
+                        轨道饼图
+                    </canvas>
+                </div>
+
+                <div class = "cakeDiv" id="daochaDiv" style="width: 150px;height: 150px;float: left;">
+                <canvas  class="cakeCanvas" id="道岔" width="100" height="100">
+                    道岔饼图
+                </canvas>
+                </div>
+
+                <div class = "cakeDiv" id="xinhaojiDiv" style="width: 150px;height: 150px;float: left;">
+                    <canvas  class="cakeCanvas" id="信号机" width="100" height="100">
+                        信号机饼图
+                    </canvas>
+                </div>
+
+                <div class = "cakeDiv" id="waidianwangDiv"style="width: 150px;height: 150px;float: left;">
+                    <canvas  class="cakeCanvas" id="外电网" width="100" height="100">
+                        外电网饼图
+                    </canvas>
+                </div>
+
+                <div class = "cakeDiv" id="zpwDiv"style="width: 150px;height: 150px;float: left;">
+                    <canvas  class="cakeCanvas" id="zpw-2000设备" width="100" height="100">
+                        zpw-2000设备饼图
+                    </canvas>
+                </div>
+                <div class = "cakeDiv" id="biseDiv"style="width: 150px;height: 150px;float: left;">
+                    <canvas  class="cakeCanvas" id="半自动闭塞" width="100" height="100">
+                        半自动闭塞饼图
+                    </canvas>
+                </div>
+                <div class = "cakeDiv" id="dianyuanpingDiv"style="width: 150px;height: 150px;float: left;">
+                    <canvas  class="cakeCanvas" id="电源屏" width="100" height="100">
+                        电源屏饼图
+                    </canvas>
+                </div>
+
+            </div>
+        </div>
+        <div id="centerPanel">
+            <div class="color-style">
+                <div class="color-line" style="background: lawngreen;"></div>健康
+            </div>
+            <div class="color-style">
+                <div class="color-line" style="background: skyblue;"></div>亚健康
+            </div>
+            <div class="color-style">
+                <div class="color-line" style="background: yellow;"></div>异常
+            </div>
+            <div class="color-style">
+                <div class="color-line" style="background: orange;"></div>病态
+            </div>
+            <div class="color-style">
+                <div class="color-line" style="background: red;"></div>故障
+            </div>
+        </div>
+        <div id="topRightPanel">
+            <div >
+                <div class = "cakeDiv" id="zicaijiDiv"style="width: 150px;height: 150px;float: left;">
+                    <canvas  class="cakeCanvas" id="自采集系统" width="100" height="100">
+                        自采集饼图
+                    </canvas>
+                </div>
+
+                <div class = "cakeDiv" id="liansuoDiv" style="width: 150px;height: 150px;float: left;">
+                    <canvas  class="cakeCanvas" id="联锁系统" width="100" height="100">
+                        联锁饼图
+                    </canvas>
+                </div>
+
+                <div class = "cakeDiv" id="CTCDiv" style="width: 150px;height: 150px;float: left;">
+                    <canvas  class="cakeCanvas" id="TDCS系统" width="100" height="100">
+                        CTC/TDCS饼图
+                    </canvas>
+                </div>
+
+                <div class = "cakeDiv" id="liekongDiv"style="width: 150px;height: 150px;float: left;">
+                    <canvas  class="cakeCanvas" id="列控系统" width="100" height="100">
+                        列控饼图
+                    </canvas>
+                </div>
+
+                <div class = "cakeDiv" id="dypSysDiv"style="width: 150px;height: 150px;float: left;">
+                    <canvas  class="cakeCanvas" id="电源屏系统" width="100" height="100">
+                        电源屏系统饼图
+                    </canvas>
+                </div>
+                <div class = "cakeDiv" id="zpw2000Div"style="width: 150px;height: 150px;float: left;">
+                    <canvas  class="cakeCanvas" id="zpw2000" width="100" height="100">
+                        zpw2000饼图
+                    </canvas>
+                </div>
+                <div class = "cakeDiv" id="daochaquekouDiv"style="width: 150px;height: 150px;float: left;">
+                    <canvas  class="cakeCanvas" id="道岔缺口" width="100" height="100">
+                        道岔缺口饼图
+                    </canvas>
+                </div>
+                <div class = "cakeDiv" id="centerCTCDiv"style="width: 150px;height: 150px;float: left;">
+                    <canvas  class="cakeCanvas" id="中心CTC" width="100" height="100">
+                        中心CTC饼图
+                    </canvas>
+                </div>
+            </div>
+        </div>
+    </div>
+    <hr>
+    <div id="dataPanel">
+        <form class="layui-form" id="searchForm">
+            <div class="layui-form-item">
+                <div class="layui-inline" id="inline1">
+                    <label class="layui-form-label">车站名称</label>
+                    <div class="layui-input-inline">
+                        <select name="stationName" id="channelUid">
+                            <option value="">全部</option>
+                            <!--<option th:each="b,bStat:${brands}" th:value="${b.uid}">[[${b?.channelName}]]</option>-->
+                            <option>长北一场</option>
+                            <option>长北二场</option>
+                            <option>长北三场</option>
+                            <option>松原站</option>
+                            <option>查干湖站</option>
+                            <option>白城站</option>
+                            <option>白城北站</option>
+                            <option>葛根庙</option>
+                            <option>乌兰浩特</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="layui-inline" id="inline1">
+                    <label class="layui-form-label">设备类型</label>
+                    <div class="layui-input-inline">
+                        <select name="deviceType" id="channelUid">
+                            <option value="">全部</option>
+                            <option>轨道电路</option>
+                            <option>道岔</option>
+                            <option>信号机</option>
+                            <option>外电网</option>
+                            <option>ZPW-2000装备</option>
+                            <option>半自动闭塞</option>
+                            <option>电源屏</option>
+                        </select>
+                    </div>
+                </div>
+
+                <button type="button"  id="addDeviceBtn" th:id="addDeviceBtn" class="layui-btn layui-btn-normal">
+                    查询
+                </button>
+                <button type="button"  id="weightConfigBtn" th:id="weightConfigBtn" class="layui-btn layui-btn-normal">
+                    指标配置
+                </button>
+
+            </div>
+        </form>
+
+        <table id="listHealthIndexTable" lay-filter="listHealthIndexTable"></table>
+    </div>
+
+</body>
+
+<script>
+    layui.use(['jquery','form','table','layer'],function () {
+        var table = layui.table, layer = layui.layer, $ = layui.jquery, form = layui.form;
+        var baseUrl = "/device";
+
+        var deviceInfoList = table.render({
+            elem: '#listHealthIndexTable'
+            , id: 'listHealthIndexTable'
+            , height: 300
+            , method: 'get'
+
+//            数据接口url
+            , url: '/ajaxHealthIndex'
+            , page: {limit: 30}
+            , request: {
+                pageName: 'page'
+                , limitName: 'number'
+            }
+
+            , parseData: function (res) {
+//                data-----page
+                console.log(res);
+                return {
+                    "code": "000"
+                    , "msg": res.status
+                    , "count": res.data.total
+                    , "data": res.data.list
+                }
+            }
+
+            , cols: [
+                [
+                    {type: 'numbers', fixed: 'left', width: 60},
+
+                    , {field: 'uid', hide: true}
+                    , {field: 'id', title: 'ID', width: 120, align: 'center'}
+//                    ,{field: 'stationId', title: '车站ID', width:120,align: 'center'}
+                    , {field: 'stationName', title: '车站名称', width: 120, align: 'center'}
+//                    ,{field: 'deviceId', title: '设备ID', width:120,align: 'center'}
+                    , {field: 'deviceName', title: '设备名称', width: 120, align: 'center'}
+                    , {field: 'deviceType', title: '设备类型', width: 120, align: 'center'}
+                    , {field: 'healthIndex', title: '健康指数', width: 120, align: 'center'}
+                    , {
+                    field: 'healthIndex', title: '健康状态', width: 120, align: 'center', templet: function (d) {
+                        if (d.healthIndex >= 85) {
+//                                console.log(d);
+                            return "健康";
+                        } else if (d.healthIndex >= 70) {
+                            return "亚健康";
+                        } else if (d.healthIndex >= 60) {
+                            return "异常";
+                        } else if (d.healthIndex >= 40) {
+                            return "病态";
+                        } else {
+                            return "故障";
+                        }
+
+                    }
+                }
+                    , {field: 'lifeLeft', title: '预期剩余寿命', width: 120, align: 'center'}
+                    , {
+                    field: 'createDate', title: '采集时间', width: 150, align: 'center',
+                    templet: "<div>{{layui.util.toDateString(d.createDate, 'yyyy年MM月dd日 HH:mm:ss')}}</div>"
+                }
+                    , {fixed: 'right', width: 280, field: 'toolbar', title: '操作', align: 'center', templet: "#barDemo"}
+                ]
+            ]
+
+        });
+
+        // 查询
+        $("#addDeviceBtn").click(function () {
+            TableReload();
+            init();
+        })
+
+        // 指标配置
+        $("#weightConfigBtn").click(function () {
+            configUrl = "/weightConfig";
+            layer.open({
+                title: "指标权重配置"
+                , type: 2
+                , content: [configUrl, 'yes']
+                , area: ["60%", "50%"]
+//                    , area: ['80%', '90%']
+
+            });
+        })
+
+        TableReload = function () {
+//            console.log("shopInfoReload()...........");
+            deviceInfoList.reload({
+                where: CreateWhere()
+                , page: {
+                    curr: 1
+                }, done: function (res, curr, count) {
+                    this.where = {};
+                }
+            })
+        }
+
+        CreateWhere = function () {
+            var data = {
+                stationName: $("select[name=stationName]").val()
+                , deviceType: $("select[name=deviceType]").val()
+            };
+//            console.log(data);
+            return deleteEmptyProperties(data);
+        }
+
+        function deleteEmptyProperties(data) {
+            for (var dataKey in data) {
+                if (data[dataKey] == "") delete data[dataKey]
+            }
+
+            return data;
+        }
+
+        table.on("tool(listHealthIndexTable)", function (obj) {
+            console.log(obj);
+            var deviceName = obj.data.deviceName;
+            var deviceId = obj.data.deviceId;
+            var stationName = obj.data.stationName;
+            if (obj.event == "view") {
+                var trendUrl = "/trend30Days?deviceId=" + deviceId + "&deviceName=" + deviceName;
+
+                console.log("---------view----------");
+                layer.open({
+                    title: "历史趋势"
+                    , type: 2
+                    , content: [trendUrl, 'yes']
+                    , area: ["60%", "50%"]
+
+                });
+
+            }else if(obj.event == "manualAdjust"){
+                var adjustUrl = "/manualAdjust?deviceId="+deviceId;
+
+                console.log("---------view----------");
+                layer.open({
+                    title: "人工辅正"
+                    , type: 2
+                    , content: [adjustUrl, 'yes']
+                    , area: ["60%", "50%"]
+
+                });
+            }
+        });
+
+
+        function init() {
+            //绘制饼图
+            //比例数据和颜色
+            console.log("cakeDiv init..............");
+            /*
+            * 初始化，先将所有饼图图示隐藏，只有选定车站查出数据之后，才进行显示
+            * */
+            $(".cakeDiv").hide();
+            var e = {
+                stationName: $("select[name=stationName]").val()
+//                ,deviceType: $("select[name=deviceType]").val()
+            };
+
+            if (e.stationName == "") {
+                return;
+            }
+            /*            console.log("========e=======");
+            console.log(e);*/
+
+            for (var dataKey in e) {
+                if (e[dataKey] == "") delete e[dataKey]
+            }
+
+            $.ajax(
+                {
+                    type: "get",
+                    url: "/ajaxHealthIndexList",
+                    data: e,
+                    dataType: "json",
+                    async: false,
+                    success: function (data) {
+
+                        console.log("cakeDiv______init()");
+//                        console.log(data);
+
+                        var content = data.data;
+                        var backgroundColor = ['LawnGreen', 'skyblue', 'Yellow', 'Orange', 'Red'];
+
+                        for (var dataKey in content) {
+                            var stationName = content[dataKey].stationName;
+//                            console.log(content[dataKey].deviceType);
+                            if (content[dataKey].deviceType == '轨道电路') {
+                                $("#guidaoDiv").show();
+                                $('#轨道电路').remove(); // this is my <canvas> element
+                                $('#guidaoDiv').append('<canvas  class="cakeCanvas" id="轨道电路" width="100" height="100"></canvas>');
+                                var ctx = document.getElementById('轨道电路').getContext('2d');
+                                var myChart = new Chart(ctx, {
+                                    type: 'doughnut',
+                                    data: {
+                                        labels: ['健康', '亚健康', '异常', '病态', '故障'],
+                                        datasets: [{
+                                            label: '示例',
+                                            data: [content[dataKey].healthyCount, content[dataKey].subhealthyCount,
+                                                content[dataKey].abnormalCount, content[dataKey].morbidCount, content[dataKey].errorCount],
+                                            borderColor: 'lightGray',
+                                            backgroundColor: backgroundColor,
+                                            borderWidth: 1
+                                        }],
+                                    },
+                                    options: {
+                                        title: {
+                                            text: stationName + '轨道电路',
+                                            display: true,
+                                            position: 'bottom'
+                                        },
+
+                                        legend: {
+                                            display: false,
+                                        },
+                                        animation: {
+                                            animateScale: true,
+                                        }
+                                    }
+                                });
+
+                            } else if (content[dataKey].deviceType == '道岔') {
+                                $("#daochaDiv").show();
+                                $('#道岔').remove(); // this is my <canvas> element
+                                $('#daochaDiv').append('<canvas  class="cakeCanvas" id="道岔" width="100" height="100"></canvas>');
+                                var ctx = document.getElementById('道岔').getContext('2d');
+                                var myChart = new Chart(ctx, {
+                                    type: 'doughnut',
+                                    data: {
+                                        labels: ['健康', '亚健康', '异常', '病态', '故障'],
+                                        datasets: [{
+                                            label: '示例',
+                                            data: [content[dataKey].healthyCount, content[dataKey].subhealthyCount,
+                                                content[dataKey].abnormalCount, content[dataKey].morbidCount, content[dataKey].errorCount],
+                                            borderColor: 'lightGray',
+                                            backgroundColor: backgroundColor,
+                                            borderWidth: 1
+                                        }],
+                                    },
+                                    options: {
+                                        title: {
+                                            text: stationName + '道岔',
+                                            display: true,
+                                            position: 'bottom'
+                                        },
+                                        legend: {
+                                            display: false,
+                                        },
+                                        animation: {
+                                            animateScale: true,
+                                        }
+                                    }
+                                });
+                            } else if (content[dataKey].deviceType == '信号机') {
+                                $("#xinhaojiDiv").show();
+                                $('#信号机').remove(); // this is my <canvas> element
+                                $('#xinhaojiDiv').append('<canvas  class="cakeCanvas" id="信号机" width="100" height="100"></canvas>');
+                                var ctx = document.getElementById('信号机').getContext('2d');
+                                var myChart = new Chart(ctx, {
+                                    type: 'doughnut',
+                                    data: {
+                                        labels: ['健康', '亚健康', '异常', '病态', '故障'],
+                                        datasets: [{
+                                            label: '示例',
+                                            data: [content[dataKey].healthyCount, content[dataKey].subhealthyCount,
+                                                content[dataKey].abnormalCount, content[dataKey].morbidCount, content[dataKey].errorCount],
+                                            borderColor: 'lightGray',
+                                            backgroundColor: backgroundColor,
+                                            borderWidth: 1
+                                        }],
+                                    },
+                                    options: {
+                                        title: {
+                                            text: stationName + '信号机',
+                                            display: true,
+                                            position: 'bottom'
+                                        },
+                                        legend: {
+                                            display: false,
+                                        },
+                                        animation: {
+                                            animateScale: true,
+                                        }
+                                    }
+                                });
+                            } else if (content[dataKey].deviceType == '外电网') {
+                                $("#waidianwangDiv").show();
+                                $('#外电网').remove(); // this is my <canvas> element
+                                $('#waidianwangDiv').append('<canvas  class="cakeCanvas" id="外电网" width="100" height="100"></canvas>');
+                                var ctx = document.getElementById('外电网').getContext('2d');
+                                var myChart = new Chart(ctx, {
+                                    type: 'doughnut',
+                                    data: {
+                                        labels: ['健康', '亚健康', '异常', '病态', '故障'],
+                                        datasets: [{
+                                            label: '示例',
+                                            data: [content[dataKey].healthyCount, content[dataKey].subhealthyCount,
+                                                content[dataKey].abnormalCount, content[dataKey].morbidCount, content[dataKey].errorCount],
+                                            borderColor: 'lightGray',
+                                            backgroundColor: backgroundColor,
+                                            borderWidth: 1
+                                        }],
+                                    },
+                                    options: {
+                                        title: {
+                                            text: stationName + '外电网',
+                                            display: true,
+                                            position: 'bottom'
+                                        },
+                                        legend: {
+                                            display: false,
+                                        },
+                                        animation: {
+                                            animateScale: true,
+                                        }
+                                    }
+                                });
+                            } else if (content[dataKey].deviceType == 'ZPW-2000设备') {
+                                $("#zpwDiv").show();
+                                $('#zpw-2000设备').remove(); // this is my <canvas> element
+                                $('#zpwDiv').append('<canvas  class="cakeCanvas" id="zpw-2000设备" width="100" height="100"></canvas>');
+                                var ctx = document.getElementById('zpw-2000设备').getContext('2d');
+                                var myChart = new Chart(ctx, {
+                                    type: 'doughnut',
+                                    data: {
+                                        labels: ['健康', '亚健康', '异常', '病态', '故障'],
+                                        datasets: [{
+                                            label: '示例',
+                                            data: [content[dataKey].healthyCount, content[dataKey].subhealthyCount,
+                                                content[dataKey].abnormalCount, content[dataKey].morbidCount, content[dataKey].errorCount],
+                                            borderColor: 'lightGray',
+                                            backgroundColor: backgroundColor,
+                                            borderWidth: 1
+                                        }],
+                                    },
+                                    options: {
+                                        title: {
+                                            text: stationName + 'ZPW-2000设备',
+                                            display: true,
+                                            position: 'bottom'
+                                        },
+                                        legend: {
+                                            display: false,
+                                        },
+                                        animation: {
+                                            animateScale: true,
+                                        }
+                                    }
+                                });
+                            } else if (content[dataKey].deviceType == '半自动闭塞') {
+                                $("#biseDiv").show();
+                                $('#半自动闭塞').remove(); // this is my <canvas> element
+                                $('#biseDiv').append('<canvas  class="cakeCanvas" id="半自动闭塞" width="100" height="100"></canvas>');
+                                var ctx = document.getElementById('半自动闭塞').getContext('2d');
+                                var myChart = new Chart(ctx, {
+                                    type: 'doughnut',
+                                    data: {
+                                        labels: ['健康', '亚健康', '异常', '病态', '故障'],
+                                        datasets: [{
+                                            label: '示例',
+                                            data: [content[dataKey].healthyCount, content[dataKey].subhealthyCount,
+                                                content[dataKey].abnormalCount, content[dataKey].morbidCount, content[dataKey].errorCount],
+                                            borderColor: 'lightGray',
+                                            backgroundColor: backgroundColor,
+                                            borderWidth: 1
+                                        }],
+                                    },
+                                    options: {
+                                        title: {
+                                            text: stationName + '半自动闭塞',
+                                            display: true,
+                                            position: 'bottom'
+                                        },
+                                        legend: {
+                                            display: false,
+                                        },
+                                        animation: {
+                                            animateScale: true,
+                                        }
+                                    }
+                                });
+                            } else if (content[dataKey].deviceType == '电源屏') {
+                                $("#dianyuanpingDiv").show();
+                                $('#电源屏').remove(); // this is my <canvas> element
+                                $('#dianyuanpingDiv').append('<canvas  class="cakeCanvas" id="电源屏" width="100" height="100"></canvas>');
+                                var ctx = document.getElementById('电源屏').getContext('2d');
+                                var myChart = new Chart(ctx, {
+                                    type: 'doughnut',
+                                    data: {
+                                        labels: ['健康', '亚健康', '异常', '病态', '故障'],
+                                        datasets: [{
+                                            label: '示例',
+                                            data: [content[dataKey].healthyCount, content[dataKey].subhealthyCount,
+                                                content[dataKey].abnormalCount, content[dataKey].morbidCount, content[dataKey].errorCount],
+                                            borderColor: 'lightGray',
+                                            backgroundColor: backgroundColor,
+                                            borderWidth: 1
+                                        }],
+                                    },
+                                    options: {
+                                        title: {
+                                            text: stationName + '电源屏',
+                                            display: true,
+                                            position: 'bottom'
+                                        },
+                                        legend: {
+                                            display: false,
+                                        },
+                                        animation: {
+                                            animateScale: true,
+                                        }
+                                    }
+                                });
+                            }
+
+                        }
+
+                    },
+                    error: function () {
+
+                    }
+                }
+            )
+
+            $.ajax(
+                {
+                    type: "get",
+                    url: "/ajaxHealthIndexBySystemList",
+                    data: e,
+                    dataType: "json",
+                    async: false,
+                    success: function (data) {
+                        console.log("----------查询系统健康度数据接口回调---------");
+                        var content = data.data;
+                        var backgroundColor = ['LawnGreen', 'skyblue', 'Yellow', 'Orange', 'Red'];
+
+                        for (var dataKey in content) {
+                            var stationName = content[dataKey].stationName;
+                            if (content[dataKey].interfaceName == '自采集') {
+                                console.log("--------自采集系统数据-------");
+                                console.log(content[dataKey]);
+                                $("#zicaijiDiv").show();
+                                $('#自采集系统').remove(); // this is my <canvas> element
+                                $('#zicaijiDiv').append('<canvas  class="cakeCanvas" id="自采集系统" width="100" height="100"></canvas>');
+                                var ctx = document.getElementById('自采集系统').getContext('2d');
+                                var myChart = new Chart(ctx, {
+                                    type: 'doughnut',
+                                    data: {
+                                        labels: ['健康', '亚健康', '异常', '病态', '故障'],
+                                        datasets: [{
+                                            label: '示例',
+                                            data: [content[dataKey].healthyCount, content[dataKey].subhealthyCount,
+                                                content[dataKey].abnormalCount, content[dataKey].morbidCount, content[dataKey].errorCount],
+                                            borderColor: 'lightGray',
+                                            backgroundColor: backgroundColor,
+                                            borderWidth: 1
+                                        }],
+                                    },
+                                    options: {
+                                        title: {
+                                            text: stationName + '自采集系统',
+                                            display: true,
+                                            position: 'bottom'
+                                        },
+
+                                        legend: {
+                                            display: false,
+                                        },
+                                        animation: {
+                                            animateScale: true,
+                                        }
+                                    }
+                                });
+                            } else if (content[dataKey].interfaceName == '联锁') {
+                                $("#liansuoDiv").show();
+                                $('#联锁系统').remove(); // this is my <canvas> element
+                                $('#liansuoDiv').append('<canvas  class="cakeCanvas" id="联锁系统" width="100" height="100"></canvas>');
+                                var ctx = document.getElementById('联锁系统').getContext('2d');
+                                var myChart = new Chart(ctx, {
+                                    type: 'doughnut',
+                                    data: {
+                                        labels: ['健康', '亚健康', '异常', '病态', '故障'],
+                                        datasets: [{
+                                            label: '示例',
+                                            data: [content[dataKey].healthyCount, content[dataKey].subhealthyCount,
+                                                content[dataKey].abnormalCount, content[dataKey].morbidCount, content[dataKey].errorCount],
+                                            borderColor: 'lightGray',
+                                            backgroundColor: backgroundColor,
+                                            borderWidth: 1
+                                        }],
+                                    },
+                                    options: {
+                                        title: {
+                                            text: stationName + '联锁系统',
+                                            display: true,
+                                            position: 'bottom'
+                                        },
+
+                                        legend: {
+                                            display: false,
+                                        },
+                                        animation: {
+                                            animateScale: true,
+                                        }
+                                    }
+                                });
+                            }else if (content[dataKey].interfaceName == 'CTC/TDCS') {
+                                $("#CTCDiv").show();
+                                $('#TDCS系统').remove(); // this is my <canvas> element
+                                $('#CTCDiv').append('<canvas  class="cakeCanvas" id="TDCS系统" width="100" height="100"></canvas>');
+                                var ctx = document.getElementById('TDCS系统').getContext('2d');
+                                var myChart = new Chart(ctx, {
+                                    type: 'doughnut',
+                                    data: {
+                                        labels: ['健康', '亚健康', '异常', '病态', '故障'],
+                                        datasets: [{
+                                            label: '示例',
+                                            data: [content[dataKey].healthyCount, content[dataKey].subhealthyCount,
+                                                content[dataKey].abnormalCount, content[dataKey].morbidCount, content[dataKey].errorCount],
+                                            borderColor: 'lightGray',
+                                            backgroundColor: backgroundColor,
+                                            borderWidth: 1
+                                        }],
+                                    },
+                                    options: {
+                                        title: {
+                                            text: stationName + 'CTC/TDCS系统',
+                                            display: true,
+                                            position: 'bottom'
+                                        },
+
+                                        legend: {
+                                            display: false,
+                                        },
+                                        animation: {
+                                            animateScale: true,
+                                        }
+                                    }
+                                });
+                            }else if (content[dataKey].interfaceName == '列控') {
+                                $("#liekongDiv").show();
+                                $('#列控系统').remove(); // this is my <canvas> element
+                                $('#liekongDiv').append('<canvas  class="cakeCanvas" id="列控系统" width="100" height="100"></canvas>');
+                                var ctx = document.getElementById('列控系统').getContext('2d');
+                                var myChart = new Chart(ctx, {
+                                    type: 'doughnut',
+                                    data: {
+                                        labels: ['健康', '亚健康', '异常', '病态', '故障'],
+                                        datasets: [{
+                                            label: '示例',
+                                            data: [content[dataKey].healthyCount, content[dataKey].subhealthyCount,
+                                                content[dataKey].abnormalCount, content[dataKey].morbidCount, content[dataKey].errorCount],
+                                            borderColor: 'lightGray',
+                                            backgroundColor: backgroundColor,
+                                            borderWidth: 1
+                                        }],
+                                    },
+                                    options: {
+                                        title: {
+                                            text: stationName + '列控系统',
+                                            display: true,
+                                            position: 'bottom'
+                                        },
+
+                                        legend: {
+                                            display: false,
+                                        },
+                                        animation: {
+                                            animateScale: true,
+                                        }
+                                    }
+                                });
+                            }else if (content[dataKey].interfaceName == '电源屏') {
+                                $("#dypSysDiv").show();
+                                $('#电源屏系统').remove(); // this is my <canvas> element
+                                $('#dypSysDiv').append('<canvas  class="cakeCanvas" id="电源屏系统" width="100" height="100"></canvas>');
+                                var c = document.getElementById('电源屏系统');
+                                var ctx = document.getElementById('电源屏系统').getContext('2d');
+
+                                var myChart = new Chart(ctx, {
+                                    type: 'doughnut',
+                                    data: {
+                                        labels: ['健康', '亚健康', '异常', '病态', '故障'],
+                                        datasets: [{
+                                            label: '示例',
+                                            data: [content[dataKey].healthyCount, content[dataKey].subhealthyCount,
+                                                content[dataKey].abnormalCount, content[dataKey].morbidCount, content[dataKey].errorCount],
+                                            borderColor: 'lightGray',
+                                            backgroundColor: backgroundColor,
+                                            borderWidth: 1
+                                        }],
+                                    },
+                                    options: {
+                                        title: {
+                                            text: stationName + '电源屏系统',
+                                            display: true,
+                                            position: 'bottom'
+                                        },
+
+                                        legend: {
+                                            display: false,
+                                        },
+                                        animation: {
+                                            animateScale: true,
+//                                            duration: 1,
+/*                                            onComplete: function() {
+                                                console.log("--test animation---------");
+                                                xCenter = c.width/2;
+                                                yCenter = c.height/2;
+                                                console.log(xCenter);
+                                                console.log(yCenter);
+                                                ctx.font="14px Arial";
+                                                ctx.fillStyle='#ea4a4a';
+                                                ctx.fillText("tstValue",xCenter,yCenter);
+
+                                            }*/
+                                        }
+                                    }
+                                });
+
+                            }else if (content[dataKey].interfaceName == 'zpw2000') {
+                                $("#zpw2000Div").show();
+                                $('#zpw2000').remove(); // this is my <canvas> element
+                                $('#zpw2000Div').append('<canvas  class="cakeCanvas" id="zpw2000" width="100" height="100"></canvas>');
+                                var ctx = document.getElementById('zpw2000').getContext('2d');
+                                var myChart = new Chart(ctx, {
+                                    type: 'doughnut',
+                                    data: {
+                                        labels: ['健康', '亚健康', '异常', '病态', '故障'],
+                                        datasets: [{
+                                            label: '示例',
+                                            data: [content[dataKey].healthyCount, content[dataKey].subhealthyCount,
+                                                content[dataKey].abnormalCount, content[dataKey].morbidCount, content[dataKey].errorCount],
+                                            borderColor: 'lightGray',
+                                            backgroundColor: backgroundColor,
+                                            borderWidth: 1
+                                        }],
+                                    },
+                                    options: {
+                                        title: {
+                                            text: stationName + 'zpw2000',
+                                            display: true,
+                                            position: 'bottom'
+                                        },
+
+                                        legend: {
+                                            display: false,
+                                        },
+                                        animation: {
+                                            animateScale: true,
+                                        }
+                                    }
+                                });
+                            }else if (content[dataKey].interfaceName == '道岔缺口') {
+                                $("#daochaquekouDiv").show();
+                                $('#道岔缺口').remove(); // this is my <canvas> element
+                                $('#daochaquekouDiv').append('<canvas  class="cakeCanvas" id="道岔缺口" width="100" height="100"></canvas>');
+                                var ctx = document.getElementById('道岔缺口').getContext('2d');
+                                var myChart = new Chart(ctx, {
+                                    type: 'doughnut',
+                                    data: {
+                                        labels: ['健康', '亚健康', '异常', '病态', '故障'],
+                                        datasets: [{
+                                            label: '示例',
+                                            data: [content[dataKey].healthyCount, content[dataKey].subhealthyCount,
+                                                content[dataKey].abnormalCount, content[dataKey].morbidCount, content[dataKey].errorCount],
+                                            borderColor: 'lightGray',
+                                            backgroundColor: backgroundColor,
+                                            borderWidth: 1
+                                        }],
+                                    },
+                                    options: {
+                                        title: {
+                                            text: stationName + '道岔缺口',
+                                            display: true,
+                                            position: 'bottom'
+                                        },
+
+                                        legend: {
+                                            display: false,
+                                        },
+                                        animation: {
+                                            animateScale: true,
+                                        }
+                                    }
+                                });
+                            }else if (content[dataKey].interfaceName == '中心CTC') {
+                                $("#centerCTCDiv").show();
+                                $('#中心CTC').remove(); // this is my <canvas> element
+                                $('#centerCTCDiv').append('<canvas  class="cakeCanvas" id="中心CTC" width="100" height="100"></canvas>');
+                                var ctx = document.getElementById('中心CTC').getContext('2d');
+                                var myChart = new Chart(ctx, {
+                                    type: 'doughnut',
+                                    data: {
+                                        labels: ['健康', '亚健康', '异常', '病态', '故障'],
+                                        datasets: [{
+                                            label: '示例',
+                                            data: [content[dataKey].healthyCount, content[dataKey].subhealthyCount,
+                                                content[dataKey].abnormalCount, content[dataKey].morbidCount, content[dataKey].errorCount],
+                                            borderColor: 'lightGray',
+                                            backgroundColor: backgroundColor,
+                                            borderWidth: 1
+                                        }],
+                                    },
+                                    options: {
+                                        title: {
+                                            text: stationName + '中心CTC',
+                                            display: true,
+                                            position: 'bottom'
+                                        },
+
+                                        legend: {
+                                            display: false,
+                                        },
+                                        animation: {
+                                            animateScale: true,
+                                        }
+                                    }
+                                });
+                            }
+
+
+                        }
+                    },
+                    error: function () {
+                    }
+                }
+            )
+
+        }
+
+    });
+</script>
+
+<script type="text/html" id="barDemo">
+    <a class="layui-btn layui-btn-xs" lay-event="view">查看30日内趋势</a>
+    <!--<a class="layui-btn layui-btn-xs" lay-event="shopUp">维修建议</a>-->
+    <a class="layui-btn layui-btn-xs" lay-event="manualAdjust">人工辅正</a>
+</script>
+
+</html>

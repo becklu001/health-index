@@ -1,0 +1,231 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ht.healthindex.dao.StationHIDOMapper">
+  <resultMap id="BaseResultMap" type="com.ht.healthindex.dataobject.StationHIDO">
+    <id column="id" jdbcType="INTEGER" property="id" />
+    <result column="station_id" jdbcType="INTEGER" property="stationId" />
+    <result column="station_name" jdbcType="VARCHAR" property="stationName" />
+    <result column="line_name" jdbcType="VARCHAR" property="lineName" />
+    <result column="workshop_name" jdbcType="VARCHAR" property="workshopName" />
+    <result column="section_name" jdbcType="VARCHAR" property="sectionName" />
+    <result column="company_name" jdbcType="VARCHAR" property="companyName" />
+    <result column="health_index" jdbcType="DECIMAL" property="healthIndex" />
+    <result column="create_date" jdbcType="TIMESTAMP" property="createDate" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    id, station_id, station_name, line_name, workshop_name, section_name, company_name, 
+    health_index, create_date
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from station_health_index
+    where id = #{id,jdbcType=INTEGER}
+  </select>
+
+
+  <select id="listStationHILatestByCondition" parameterType="com.ht.healthindex.dataobject.StationHIDO" resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List" />
+    from
+    <trim prefix="(" suffix=")">
+      select
+      <include refid="Base_Column_List" />
+      from station_health_index
+      <where>
+        <if test="stationId != null">
+          station_id = #{stationId,jdbcType=INTEGER}
+        </if>
+        <if test="stationName != null">
+          and station_name = #{stationName,jdbcType=VARCHAR}
+        </if>
+        <if test="lineName != null">
+          and line_name = #{lineName,jdbcType=VARCHAR}
+        </if>
+        <if test="workshopName != null">
+          and workshop_name = #{workshopName,jdbcType=VARCHAR}
+        </if>
+        <if test="sectionName != null">
+          and section_name = #{sectionName,jdbcType=VARCHAR}
+        </if>
+        <if test="companyName != null">
+          and company_name = #{companyName,jdbcType=VARCHAR}
+        </if>
+        <if test="healthIndex != null">
+          and health_index = #{healthIndex,jdbcType=DECIMAL}
+        </if>
+        <if test="createDate != null">
+          and create_date >= #{createDate,jdbcType=TIMESTAMP}
+          and to_days(create_date)-to_days(#{createDate,jdbcType=TIMESTAMP}) &lt;= 1
+        </if>
+      </where>
+
+      order by create_date desc
+      limit 10000
+    </trim>
+    as temp_table group by temp_table.station_id
+  </select>
+
+
+
+  <select id="listStationHILatest30days" parameterType="com.ht.healthindex.dataobject.StationHIDO" resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List" />
+    from
+    <trim prefix="(" suffix=")">
+      select
+      <include refid="Base_Column_List" />
+      from station_health_index
+      <where>
+        <if test="stationId != null">
+          station_id = #{stationId,jdbcType=INTEGER}
+        </if>
+        <if test="stationName != null">
+          and station_name = #{stationName,jdbcType=VARCHAR}
+        </if>
+        <if test="lineName != null">
+          and line_name = #{lineName,jdbcType=VARCHAR}
+        </if>
+        <if test="workshopName != null">
+          and workshop_name = #{workshopName,jdbcType=VARCHAR}
+        </if>
+        <if test="sectionName != null">
+          and section_name = #{sectionName,jdbcType=VARCHAR}
+        </if>
+        <if test="companyName != null">
+          and company_name = #{companyName,jdbcType=VARCHAR}
+        </if>
+        <if test="healthIndex != null">
+          and health_index = #{healthIndex,jdbcType=DECIMAL}
+        </if>
+        <if test="createDate != null">
+          and to_days(create_date) &lt;= to_days(#{createDate}) + 1
+          and to_days(create_date) &gt;= to_days(#{createDate,jdbcType=TIMESTAMP}) - 29
+        </if>
+      </where>
+
+      order by create_date desc
+      limit 10000
+    </trim>
+    as temp_table
+  </select>
+
+
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    delete from station_health_index
+    where id = #{id,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="com.ht.healthindex.dataobject.StationHIDO">
+    insert into station_health_index (id, station_id, station_name, 
+      line_name, workshop_name, section_name, 
+      company_name, health_index, create_date
+      )
+    values (#{id,jdbcType=INTEGER}, #{stationId,jdbcType=INTEGER}, #{stationName,jdbcType=VARCHAR}, 
+      #{lineName,jdbcType=VARCHAR}, #{workshopName,jdbcType=VARCHAR}, #{sectionName,jdbcType=VARCHAR}, 
+      #{companyName,jdbcType=VARCHAR}, #{healthIndex,jdbcType=DECIMAL}, #{createDate,jdbcType=TIMESTAMP}
+      )
+  </insert>
+  <insert id="insertSelective" parameterType="com.ht.healthindex.dataobject.StationHIDO">
+    insert into station_health_index
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        id,
+      </if>
+      <if test="stationId != null">
+        station_id,
+      </if>
+      <if test="stationName != null">
+        station_name,
+      </if>
+      <if test="lineName != null">
+        line_name,
+      </if>
+      <if test="workshopName != null">
+        workshop_name,
+      </if>
+      <if test="sectionName != null">
+        section_name,
+      </if>
+      <if test="companyName != null">
+        company_name,
+      </if>
+      <if test="healthIndex != null">
+        health_index,
+      </if>
+      <if test="createDate != null">
+        create_date,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        #{id,jdbcType=INTEGER},
+      </if>
+      <if test="stationId != null">
+        #{stationId,jdbcType=INTEGER},
+      </if>
+      <if test="stationName != null">
+        #{stationName,jdbcType=VARCHAR},
+      </if>
+      <if test="lineName != null">
+        #{lineName,jdbcType=VARCHAR},
+      </if>
+      <if test="workshopName != null">
+        #{workshopName,jdbcType=VARCHAR},
+      </if>
+      <if test="sectionName != null">
+        #{sectionName,jdbcType=VARCHAR},
+      </if>
+      <if test="companyName != null">
+        #{companyName,jdbcType=VARCHAR},
+      </if>
+      <if test="healthIndex != null">
+        #{healthIndex,jdbcType=DECIMAL},
+      </if>
+      <if test="createDate != null">
+        #{createDate,jdbcType=TIMESTAMP},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.ht.healthindex.dataobject.StationHIDO">
+    update station_health_index
+    <set>
+      <if test="stationId != null">
+        station_id = #{stationId,jdbcType=INTEGER},
+      </if>
+      <if test="stationName != null">
+        station_name = #{stationName,jdbcType=VARCHAR},
+      </if>
+      <if test="lineName != null">
+        line_name = #{lineName,jdbcType=VARCHAR},
+      </if>
+      <if test="workshopName != null">
+        workshop_name = #{workshopName,jdbcType=VARCHAR},
+      </if>
+      <if test="sectionName != null">
+        section_name = #{sectionName,jdbcType=VARCHAR},
+      </if>
+      <if test="companyName != null">
+        company_name = #{companyName,jdbcType=VARCHAR},
+      </if>
+      <if test="healthIndex != null">
+        health_index = #{healthIndex,jdbcType=DECIMAL},
+      </if>
+      <if test="createDate != null">
+        create_date = #{createDate,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.ht.healthindex.dataobject.StationHIDO">
+    update station_health_index
+    set station_id = #{stationId,jdbcType=INTEGER},
+      station_name = #{stationName,jdbcType=VARCHAR},
+      line_name = #{lineName,jdbcType=VARCHAR},
+      workshop_name = #{workshopName,jdbcType=VARCHAR},
+      section_name = #{sectionName,jdbcType=VARCHAR},
+      company_name = #{companyName,jdbcType=VARCHAR},
+      health_index = #{healthIndex,jdbcType=DECIMAL},
+      create_date = #{createDate,jdbcType=TIMESTAMP}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+</mapper>

@@ -1,0 +1,33 @@
+# ����Դ����
+spring:
+  datasource:
+    url: jdbc:mysql://127.0.0.1:3306/device_health_monitor?zeroDateTimeBehavior=convertToNull&characterEncoding=UTF-8&serverTimezone=Asia/Shanghai
+    username: root
+    password: root
+    driver-class-name: com.mysql.cj.jdbc.Driver
+  resources:
+    static-locations: classpath:/templates/,classpath:/static/
+
+thymeleaf:
+#  prefix: file:F:/Personal/Desktop/health-index/src/main/resources/templates
+  prefix: file:F:\Personal\Desktop\health-index\src\main\resources\templates
+#  prefix: classpath:/templates
+
+# ctrl+f9 修改页面后不需要重启sever
+  cache: false
+
+#  mybatis.mapper-locations=classpath:mapping/*.xml
+mybatis:
+  mapper-locations: classpath:mapper/*.xml
+
+pagehelper:
+    helperDialect: mysql
+    reasonable: true
+    supportMethodsArguments: true
+    params: count=countSql
+
+logging:
+  level:
+    org.springframework: info
+    org.springframework.security: info
+    com.ht.healthindex.dao: debug

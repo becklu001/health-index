@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" href="layui/css/layui.css" />
+    <script type="text/javascript" src="layui/layui.js" ></script>
+    <script type="text/javascript" src="jquery-1.11.0.min.js" ></script>
+    <script src="https://how2j.cn/study/js/chartjs/2.8.0/chart.min.js"></script>
+</head>
+<body>
+<div style="width:400px;margin:0px auto">
+    <canvas id="myChart" ></canvas>
+</div>
+<script>
+    jQuery(document).ready(function(){
+        var urlStr = window.location.search;
+        console.log("-------urlStr--------");
+        console.log(urlStr);
+        $.ajax(
+            {
+                type:"get",
+                url:"/latest30days"+urlStr,
+                dataType:"json",
+                async: false,
+                success:function (data) {
+
+                    console.log("trend______init()");
+                    console.log(data);
+
+                    var content = data.data;
+                    var ctx = document.getElementById('myChart').getContext('2d');
+                    var arrayDate = new Array();
+                    var arrayHealthIndex = new Array();
+                    var deviceName = null;
+
+                    for (var dataKey in content){
+                        console.log(content[dataKey].deviceType);
+                        arrayDate.push(new Date(content[dataKey].createDate).toLocaleDateString());
+                        arrayHealthIndex.push(content[dataKey].healthIndex);
+                        deviceName = content[dataKey].deviceName;
+                    }
+
+                    var myChart = new Chart(ctx,{
+                        type:'line',
+                        data:{
+                            labels:arrayDate,
+                            datasets:[{
+                                label:deviceName+'设备30日内健康度趋势',
+                                data:arrayHealthIndex,
+                                borderColor:'blue',
+                                backgroundColor:'skyBlue',
+                                borderWidth: 1,
+                                fill: false,
+                            }]
+                        }
+                    });
+
+                },
+                error:function () {
+                }
+            }
+        )
+    });
+
+
+
+/*    var ctx = document.getElementById('myChart').getContext('2d');
+    var myChart = new Chart(ctx, {
+        type: 'line',
+        data: {
+            labels: ['红', '蓝', '黄', '绿', '紫', '橙'],
+            datasets: [
+                {
+                    label: '示例1',
+                    data: [12, 19, 3, 5, 0, 3],
+                    borderColor:'blue',
+                    backgroundColor:'skyBlue',
+                    borderWidth: 1,
+                    fill: false,
+
+                },
+                {
+                    label: '示例2',
+                    data: [182, 51, 133, 54, 105, 96],
+                    borderColor:'red',
+                    backgroundColor:'pink',
+                    borderWidth: 1,
+                    fill: false,
+                },
+
+            ]
+        }
+    });*/
+</script>
+</body>
+</html>

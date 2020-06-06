@@ -1,0 +1,262 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity4">
+<head>
+    <meta charset="UTF-8">
+    <title>人工辅正</title>
+    <!--<link  rel="stylesheet"  href="../common/layui/css/layui.css" >-->
+
+    <link rel="stylesheet" href="layui/css/layui.css" />
+    <script type="text/javascript" src="layui/layui.js" ></script>
+    <script src="https://how2j.cn/study/js/chartjs/2.8.0/chart.min.js"></script>
+
+    <STYLE>
+        .layui-card-header{
+            background: #e2e2e2;
+        }
+    </STYLE>
+</head>
+<body>
+
+<div class="layui-fluid">
+    <div class="layui-row layui-col-space15">
+        <div class="layui-col-md12">
+            <form class="layui-form" lay-filter="EditUserForm">
+                <label style="display:none;"><span></span><input type="text" name="id" ></label>
+                <input name="id" style="display: none">
+                <input name="deviceId" style="display: none">
+
+                <div class="layui-card">
+                    <div class="layui-card-header"><i class="layui-icon">&#xe62d;</i>上一次辅正记录</div>
+                    <div class="layui-card-body clean-padding">
+                        <div class="layui-row layui-col-space12">
+                            <div class="layui-col-sm6">
+                                <div class="layui-form-item">
+                                    <label class="layui-form-label">车站名称</label>
+                                    <div class="layui-input-block">
+                                        <input type="text" name="stationName" lay-verify=""  disabled autocomplete="off" class="layui-input">
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="layui-col-sm6">
+                                <div class="layui-form-item">
+                                    <label class="layui-form-label">设备名称</label>
+                                    <div class="layui-input-block">
+                                        <input type="text" name="deviceName" lay-verify=""  disabled autocomplete="off" class="layui-input ">
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="layui-col-sm6">
+                                <div class="layui-form-item">
+                                    <label class="layui-form-label">辅正值</label>
+                                    <div class="layui-input-block">
+                                        <input type="text" name="lastAdjustValue" lay-verify=""  disabled autocomplete="off" class="layui-input ">
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="layui-col-sm6">
+                                <div class="layui-form-item">
+                                    <label class="layui-form-label">发生时间</label>
+                                    <div class="layui-input-block">
+                                        <input type="text" name="lastCreateTime"  lay-verify=""  disabled autocomplete="off" class="layui-input ">
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="layui-card">
+                <div class="layui-card-header">新增辅正记录</div>
+                <div class="layui-card-body clean-padding">
+                    <div class="layui-row layui-col-space12">
+                        <div class="layui-col-sm6">
+                            <div class="layui-form-item">
+                                <label class="layui-form-label"><span style="color: red">*</span>车站名称</label>
+                                <div class="layui-input-block">
+                                    <input type="text" name="stationName" disabled lay-verify=""  autocomplete="off" class="layui-input">
+                                </div>
+                            </div>
+                        </div>
+                        <div class="layui-col-sm6">
+                            <div class="layui-form-item">
+                                <label class="layui-form-label"><span style="color: red">*</span>设备名称</label>
+                                <div class="layui-input-block">
+                                    <input type="text" name="deviceName" disabled lay-verify=""  autocomplete="off" class="layui-input ">
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="layui-col-sm6">
+                            <div class="layui-form-item">
+                                <label class="layui-form-label"><span style="color: red">*</span>辅正值</label>
+                                <div class="layui-input-block">
+                                    <input type="text" name="adjustValue" lay-verify="required|number|oncePerMonth"  autocomplete="off" class="layui-input ">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+        </div><!--  layui-card -->
+
+                <div class="layui-form-item">
+                    <div class="layui-form-item">
+                        <div class="layui-input-block">
+                            <button  th:type="button" lay-submit="" lay-filter="editConfig" class="layui-btn">确定</button>
+
+                            <!--<button   class="layui-btn" lay-submit="" lay-filter="formDemo">立即提交</button>-->
+                            <button type="reset" class="layui-btn layui-btn-primary">重置</button>
+                        </div>
+                    </div>
+                </div>
+
+            </form>
+        </div>
+    </div>
+</div>
+</div>
+
+</body>
+<script type="text/javascript">
+    /**
+     * 页面数据初始化
+     * @param data
+     */
+    console.log("-------out init ---------");
+
+    layui.use(['form','jquery','util'],function () {
+        const form = layui.form,layer = layui.layer,$ = layui.jquery,util = layui.util;
+
+        var urlStr = window.location.search;
+        var configUrl = "/ajaxManualAdjust"+urlStr;
+        var lastCreateMonth ;
+        var lastCreateTime;
+
+        $.ajax(
+            {
+                type: "get",
+                url: configUrl,
+                dataType: "json",
+                async: false,
+                success: function (data) {
+                    content = data.data;
+                    console.log("--------查询表单内容回调---------");
+                    console.log(content);
+
+//                    alert(typeof content.createDate);
+                    if (content.createDate != null) {
+                        var lastMonth = new Date(Date.parse(content.createDate));
+                        lastCreateTime = util.toDateString(content.createDate);
+                        console.log("----------test---------");
+                        lastCreateMonth = lastMonth.getMonth();
+                    }
+
+                    console.log("上次次辅正月份："+lastCreateMonth);
+
+                    // 表单值初始化
+                    form.val("EditUserForm",{
+                        "id":content.id
+                        ,"deviceId":content.deviceId
+                        ,"stationName": content.stationName
+                        ,"deviceName": content.deviceName
+                        ,"lastAdjustValue": content.value
+                        ,"lastCreateTime": lastCreateTime
+                    })
+                },
+                error:function () {}
+            });
+
+
+        form.on('submit(editConfig)',function (data) {
+            console.log("--------- 确定 ---------");
+            console.log(data);
+            console.log(data.field);
+
+            var thisMonth = new Date().getMonth();
+            console.log("本次辅正月份："+thisMonth);
+            console.log("=====本月=====");
+            if(thisMonth === lastCreateMonth){
+                layer.msg("设备本月已经进行过人工辅正，无法继续操作");
+                return;
+            }
+
+            let loadIndex;
+
+            $.ajax({
+                type: 'post'
+                ,url: '/addManualAdjust'
+                ,dataType: 'json'
+                ,data: {
+                    "deviceId":data.field.deviceId,
+                    "value":data.field.adjustValue
+                }
+                ,beforeSend: function () {
+                    loadIndex = layer.load()
+                }
+                ,complete: function () {
+                    layer.close(loadIndex);
+                }
+                ,error: function () {
+                    layer.msg("服务异常,请稍后重试！")
+                }
+                ,success: function (data) {
+                    console.log("---------success--------");
+                    console.log(data);
+                    if(data.status == 'success'){
+                        layer.msg("修改成功",{time: 500},function () {
+                            let parentIndex = parent.layer.getFrameIndex(window.name);
+                            parent.layer.close(parentIndex);
+                        })
+                    }else{
+                        layer.msg(data.errMsg)
+                    }
+                }
+
+            })
+            return false;
+
+        });
+
+/*        form.on('submit(editShop)',function (data) {
+
+            let loadIndex;
+            let field = data.field;
+            delete field.officeUid
+            delete field.userType
+            delete field.loginName
+            $.ajax({
+                type: 'post'
+                ,url: '/sys/user/edit'
+                ,dataType: 'json'
+                ,data: data.field
+                ,beforeSend: function () {
+                    loadIndex = layer.load()
+                }
+                ,complete: function () {
+                    layer.close(loadIndex);
+                }
+                ,error: function () {
+                    layer.msg("服务异常,请稍后重试！")
+                }
+                ,success: function (data) {
+                    console.log("---------success--------");
+                    console.log(data);
+                    if(data.code == 0){
+                        layer.msg("修改成功",{time: 500},function () {
+                            let parentIndex = parent.layer.getFrameIndex(window.name);
+                            parent.layer.close(parentIndex);
+                        })
+                    }else{
+                        layer.msg(data.msg)
+                    }
+                }
+
+            })
+            return false;
+        })*/
+
+
+    });
+
+</script>
+</html>

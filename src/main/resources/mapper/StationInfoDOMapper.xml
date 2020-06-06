@@ -1,0 +1,113 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ht.healthindex.dao.StationInfoDOMapper">
+  <resultMap id="BaseResultMap" type="com.ht.healthindex.dataobject.StationInfoDO">
+    <id column="id" jdbcType="INTEGER" property="id" />
+    <result column="station_name" jdbcType="VARCHAR" property="stationName" />
+    <result column="workshop_name" jdbcType="VARCHAR" property="workshopName" />
+    <result column="line_name" jdbcType="VARCHAR" property="lineName" />
+    <result column="section_name" jdbcType="VARCHAR" property="sectionName" />
+    <result column="company_name" jdbcType="VARCHAR" property="companyName" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    id, station_name, workshop_name, line_name, section_name, company_name
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from station_info
+    where id = #{id,jdbcType=INTEGER}
+  </select>
+
+  <select id="listStationInfo"  resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List" />
+    from station_info
+  </select>
+
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    delete from station_info
+    where id = #{id,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="com.ht.healthindex.dataobject.StationInfoDO">
+    insert into station_info (id, station_name, workshop_name, 
+      line_name, section_name, company_name
+      )
+    values (#{id,jdbcType=INTEGER}, #{stationName,jdbcType=VARCHAR}, #{workshopName,jdbcType=VARCHAR}, 
+      #{lineName,jdbcType=VARCHAR}, #{sectionName,jdbcType=VARCHAR}, #{companyName,jdbcType=VARCHAR}
+      )
+  </insert>
+  <insert id="insertSelective" parameterType="com.ht.healthindex.dataobject.StationInfoDO">
+    insert into station_info
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        id,
+      </if>
+      <if test="stationName != null">
+        station_name,
+      </if>
+      <if test="workshopName != null">
+        workshop_name,
+      </if>
+      <if test="lineName != null">
+        line_name,
+      </if>
+      <if test="sectionName != null">
+        section_name,
+      </if>
+      <if test="companyName != null">
+        company_name,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        #{id,jdbcType=INTEGER},
+      </if>
+      <if test="stationName != null">
+        #{stationName,jdbcType=VARCHAR},
+      </if>
+      <if test="workshopName != null">
+        #{workshopName,jdbcType=VARCHAR},
+      </if>
+      <if test="lineName != null">
+        #{lineName,jdbcType=VARCHAR},
+      </if>
+      <if test="sectionName != null">
+        #{sectionName,jdbcType=VARCHAR},
+      </if>
+      <if test="companyName != null">
+        #{companyName,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.ht.healthindex.dataobject.StationInfoDO">
+    update station_info
+    <set>
+      <if test="stationName != null">
+        station_name = #{stationName,jdbcType=VARCHAR},
+      </if>
+      <if test="workshopName != null">
+        workshop_name = #{workshopName,jdbcType=VARCHAR},
+      </if>
+      <if test="lineName != null">
+        line_name = #{lineName,jdbcType=VARCHAR},
+      </if>
+      <if test="sectionName != null">
+        section_name = #{sectionName,jdbcType=VARCHAR},
+      </if>
+      <if test="companyName != null">
+        company_name = #{companyName,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.ht.healthindex.dataobject.StationInfoDO">
+    update station_info
+    set station_name = #{stationName,jdbcType=VARCHAR},
+      workshop_name = #{workshopName,jdbcType=VARCHAR},
+      line_name = #{lineName,jdbcType=VARCHAR},
+      section_name = #{sectionName,jdbcType=VARCHAR},
+      company_name = #{companyName,jdbcType=VARCHAR}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+</mapper>

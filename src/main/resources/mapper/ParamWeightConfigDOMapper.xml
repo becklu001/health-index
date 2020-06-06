@@ -1,0 +1,214 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ht.healthindex.dao.ParamWeightConfigDOMapper">
+  <resultMap id="BaseResultMap" type="com.ht.healthindex.dataobject.ParamWeightConfigDO">
+    <id column="id" jdbcType="INTEGER" property="id" />
+    <result column="level1_alarm_weight" jdbcType="DECIMAL" property="level1AlarmWeight" />
+    <result column="level2_alarm_weight" jdbcType="DECIMAL" property="level2AlarmWeight" />
+    <result column="level3_alarm_weight" jdbcType="DECIMAL" property="level3AlarmWeight" />
+    <result column="forecast_weight" jdbcType="DECIMAL" property="forecastWeight" />
+    <result column="count_weight" jdbcType="DECIMAL" property="countWeight" />
+    <result column="skylight_weight" jdbcType="DECIMAL" property="skylightWeight" />
+    <result column="manual_weight" jdbcType="DECIMAL" property="manualWeight" />
+    <result column="manual_update_date" jdbcType="DATE" property="manualUpdateDate" />
+    <result column="life_weight" jdbcType="DECIMAL" property="lifeWeight" />
+    <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
+    <result column="update_time" jdbcType="TIMESTAMP" property="updateTime" />
+    <result column="update_by" jdbcType="INTEGER" property="updateBy" />
+    <result column="remarks" jdbcType="VARCHAR" property="remarks" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    id, level1_alarm_weight, level2_alarm_weight, level3_alarm_weight, forecast_weight, 
+    count_weight, skylight_weight, manual_weight, manual_update_date, life_weight, create_time, 
+    update_time, update_by, remarks
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from param_weight_config
+    where id = #{id,jdbcType=INTEGER}
+  </select>
+
+  <select id="getLatestConfig"  resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List" />
+    from param_weight_config
+    ORDER BY update_time desc limit 1
+  </select>
+
+  <select id="listConfig" resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List" />
+    from param_weight_config
+  </select>
+
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    delete from param_weight_config
+    where id = #{id,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="com.ht.healthindex.dataobject.ParamWeightConfigDO">
+    insert into param_weight_config (id, level1_alarm_weight, level2_alarm_weight, 
+      level3_alarm_weight, forecast_weight, count_weight, 
+      skylight_weight, manual_weight, manual_update_date, 
+      life_weight, create_time, update_time, 
+      update_by, remarks)
+    values (#{id,jdbcType=INTEGER}, #{level1AlarmWeight,jdbcType=DECIMAL}, #{level2AlarmWeight,jdbcType=DECIMAL}, 
+      #{level3AlarmWeight,jdbcType=DECIMAL}, #{forecastWeight,jdbcType=DECIMAL}, #{countWeight,jdbcType=DECIMAL}, 
+      #{skylightWeight,jdbcType=DECIMAL}, #{manualWeight,jdbcType=DECIMAL}, #{manualUpdateDate,jdbcType=DATE}, 
+      #{lifeWeight,jdbcType=DECIMAL}, #{createTime,jdbcType=TIMESTAMP}, #{updateTime,jdbcType=TIMESTAMP}, 
+      #{updateBy,jdbcType=INTEGER}, #{remarks,jdbcType=VARCHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="com.ht.healthindex.dataobject.ParamWeightConfigDO">
+    insert into param_weight_config
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        id,
+      </if>
+      <if test="level1AlarmWeight != null">
+        level1_alarm_weight,
+      </if>
+      <if test="level2AlarmWeight != null">
+        level2_alarm_weight,
+      </if>
+      <if test="level3AlarmWeight != null">
+        level3_alarm_weight,
+      </if>
+      <if test="forecastWeight != null">
+        forecast_weight,
+      </if>
+      <if test="countWeight != null">
+        count_weight,
+      </if>
+      <if test="skylightWeight != null">
+        skylight_weight,
+      </if>
+      <if test="manualWeight != null">
+        manual_weight,
+      </if>
+      <if test="manualUpdateDate != null">
+        manual_update_date,
+      </if>
+      <if test="lifeWeight != null">
+        life_weight,
+      </if>
+      <if test="createTime != null">
+        create_time,
+      </if>
+      <if test="updateTime != null">
+        update_time,
+      </if>
+      <if test="updateBy != null">
+        update_by,
+      </if>
+      <if test="remarks != null">
+        remarks,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        #{id,jdbcType=INTEGER},
+      </if>
+      <if test="level1AlarmWeight != null">
+        #{level1AlarmWeight,jdbcType=DECIMAL},
+      </if>
+      <if test="level2AlarmWeight != null">
+        #{level2AlarmWeight,jdbcType=DECIMAL},
+      </if>
+      <if test="level3AlarmWeight != null">
+        #{level3AlarmWeight,jdbcType=DECIMAL},
+      </if>
+      <if test="forecastWeight != null">
+        #{forecastWeight,jdbcType=DECIMAL},
+      </if>
+      <if test="countWeight != null">
+        #{countWeight,jdbcType=DECIMAL},
+      </if>
+      <if test="skylightWeight != null">
+        #{skylightWeight,jdbcType=DECIMAL},
+      </if>
+      <if test="manualWeight != null">
+        #{manualWeight,jdbcType=DECIMAL},
+      </if>
+      <if test="manualUpdateDate != null">
+        #{manualUpdateDate,jdbcType=DATE},
+      </if>
+      <if test="lifeWeight != null">
+        #{lifeWeight,jdbcType=DECIMAL},
+      </if>
+      <if test="createTime != null">
+        #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updateTime != null">
+        #{updateTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updateBy != null">
+        #{updateBy,jdbcType=INTEGER},
+      </if>
+      <if test="remarks != null">
+        #{remarks,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.ht.healthindex.dataobject.ParamWeightConfigDO">
+    update param_weight_config
+    <set>
+      <if test="level1AlarmWeight != null">
+        level1_alarm_weight = #{level1AlarmWeight,jdbcType=DECIMAL},
+      </if>
+      <if test="level2AlarmWeight != null">
+        level2_alarm_weight = #{level2AlarmWeight,jdbcType=DECIMAL},
+      </if>
+      <if test="level3AlarmWeight != null">
+        level3_alarm_weight = #{level3AlarmWeight,jdbcType=DECIMAL},
+      </if>
+      <if test="forecastWeight != null">
+        forecast_weight = #{forecastWeight,jdbcType=DECIMAL},
+      </if>
+      <if test="countWeight != null">
+        count_weight = #{countWeight,jdbcType=DECIMAL},
+      </if>
+      <if test="skylightWeight != null">
+        skylight_weight = #{skylightWeight,jdbcType=DECIMAL},
+      </if>
+      <if test="manualWeight != null">
+        manual_weight = #{manualWeight,jdbcType=DECIMAL},
+      </if>
+      <if test="manualUpdateDate != null">
+        manual_update_date = #{manualUpdateDate,jdbcType=DATE},
+      </if>
+      <if test="lifeWeight != null">
+        life_weight = #{lifeWeight,jdbcType=DECIMAL},
+      </if>
+      <if test="createTime != null">
+        create_time = #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updateTime != null">
+        update_time = #{updateTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updateBy != null">
+        update_by = #{updateBy,jdbcType=INTEGER},
+      </if>
+      <if test="remarks != null">
+        remarks = #{remarks,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.ht.healthindex.dataobject.ParamWeightConfigDO">
+    update param_weight_config
+    set level1_alarm_weight = #{level1AlarmWeight,jdbcType=DECIMAL},
+      level2_alarm_weight = #{level2AlarmWeight,jdbcType=DECIMAL},
+      level3_alarm_weight = #{level3AlarmWeight,jdbcType=DECIMAL},
+      forecast_weight = #{forecastWeight,jdbcType=DECIMAL},
+      count_weight = #{countWeight,jdbcType=DECIMAL},
+      skylight_weight = #{skylightWeight,jdbcType=DECIMAL},
+      manual_weight = #{manualWeight,jdbcType=DECIMAL},
+      manual_update_date = #{manualUpdateDate,jdbcType=DATE},
+      life_weight = #{lifeWeight,jdbcType=DECIMAL},
+      create_time = #{createTime,jdbcType=TIMESTAMP},
+      update_time = #{updateTime,jdbcType=TIMESTAMP},
+      update_by = #{updateBy,jdbcType=INTEGER},
+      remarks = #{remarks,jdbcType=VARCHAR}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+</mapper>

@@ -1,0 +1,491 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ht.healthindex.dao.HistoryAlarmDOMapper">
+  <resultMap id="BaseResultMap" type="com.ht.healthindex.dataobject.HistoryAlarmDO">
+    <id column="funikey" jdbcType="VARCHAR" property="funikey" />
+    <id column="falarmtime" jdbcType="TIMESTAMP" property="falarmtime" />
+    <result column="fstationcode" jdbcType="VARCHAR" property="fstationcode" />
+    <result column="falarmdevice" jdbcType="VARCHAR" property="falarmdevice" />
+    <result column="fstationid" jdbcType="INTEGER" property="fstationid" />
+    <result column="falarmcode" jdbcType="INTEGER" property="falarmcode" />
+    <result column="flevel" jdbcType="INTEGER" property="flevel" />
+    <result column="fcontent" jdbcType="VARCHAR" property="fcontent" />
+    <result column="frecovertime" jdbcType="TIMESTAMP" property="frecovertime" />
+    <result column="fisrecover" jdbcType="INTEGER" property="fisrecover" />
+    <result column="fishandle" jdbcType="INTEGER" property="fishandle" />
+    <result column="fisfix" jdbcType="INTEGER" property="fisfix" />
+    <result column="fdevicetype" jdbcType="INTEGER" property="fdevicetype" />
+    <result column="finterfacetype" jdbcType="INTEGER" property="finterfacetype" />
+    <result column="frelateddatakeys" jdbcType="VARCHAR" property="frelateddatakeys" />
+    <result column="fdatakey" jdbcType="INTEGER" property="fdatakey" />
+    <result column="falarmreasoncode" jdbcType="INTEGER" property="falarmreasoncode" />
+    <result column="falarmreason" jdbcType="VARCHAR" property="falarmreason" />
+    <result column="falarmadvice" jdbcType="VARCHAR" property="falarmadvice" />
+    <result column="falarmfollow" jdbcType="INTEGER" property="falarmfollow" />
+    <result column="inserttime" jdbcType="TIMESTAMP" property="inserttime" />
+    <result column="fislook" jdbcType="INTEGER" property="fislook" />
+    <result column="fequmentstate" jdbcType="INTEGER" property="fequmentstate" />
+    <result column="falarmidentification" jdbcType="INTEGER" property="falarmidentification" />
+    <result column="fdealtime" jdbcType="TIMESTAMP" property="fdealtime" />
+    <result column="falarmreasonafter" jdbcType="VARCHAR" property="falarmreasonafter" />
+    <result column="freasonpeople" jdbcType="VARCHAR" property="freasonpeople" />
+    <result column="freasontime" jdbcType="TIMESTAMP" property="freasontime" />
+    <result column="frootuinkey" jdbcType="VARCHAR" property="frootuinkey" />
+    <result column="falarmreasoncodeafter" jdbcType="INTEGER" property="falarmreasoncodeafter" />
+    <result column="falarmadviceafter" jdbcType="VARCHAR" property="falarmadviceafter" />
+    <result column="fispeoplesure" jdbcType="INTEGER" property="fispeoplesure" />
+    <result column="fmonitoritem" jdbcType="INTEGER" property="fmonitoritem" />
+    <result column="ffaultlocation" jdbcType="VARCHAR" property="ffaultlocation" />
+    <result column="fqudevicetypeid" jdbcType="INTEGER" property="fqudevicetypeid" />
+    <result column="fobstaclephenomenonid" jdbcType="INTEGER" property="fobstaclephenomenonid" />
+    <result column="freasonlocationid" jdbcType="INTEGER" property="freasonlocationid" />
+    <result column="flevelpromotemsg" jdbcType="VARCHAR" property="flevelpromotemsg" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    funikey, falarmtime, fstationcode, falarmdevice, fstationid, falarmcode, flevel, 
+    fcontent, frecovertime, fisrecover, fishandle, fisfix, fdevicetype, finterfacetype, 
+    frelateddatakeys, fdatakey, falarmreasoncode, falarmreason, falarmadvice, falarmfollow, 
+    inserttime, fislook, fequmentstate, falarmidentification, fdealtime, falarmreasonafter, 
+    freasonpeople, freasontime, frootuinkey, falarmreasoncodeafter, falarmadviceafter, 
+    fispeoplesure, fmonitoritem, ffaultlocation, fqudevicetypeid, fobstaclephenomenonid, 
+    freasonlocationid, flevelpromotemsg
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="com.ht.healthindex.dataobject.HistoryAlarmDOKey" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from t_app_history_alarm
+    where funikey = #{funikey,jdbcType=VARCHAR}
+      and falarmtime = #{falarmtime,jdbcType=TIMESTAMP}
+  </select>
+  <select id="listByAlarmDeviceAndStationId"  resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List" />
+    from t_app_history_alarm
+    where falarmdevice = #{falarmdevice,jdbcType=VARCHAR}
+    and fstationid = #{fstationid,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="com.ht.healthindex.dataobject.HistoryAlarmDOKey">
+    delete from t_app_history_alarm
+    where funikey = #{funikey,jdbcType=VARCHAR}
+      and falarmtime = #{falarmtime,jdbcType=TIMESTAMP}
+  </delete>
+  <insert id="insert" parameterType="com.ht.healthindex.dataobject.HistoryAlarmDO">
+    insert into t_app_history_alarm (funikey, falarmtime, fstationcode, 
+      falarmdevice, fstationid, falarmcode, 
+      flevel, fcontent, frecovertime, 
+      fisrecover, fishandle, fisfix, 
+      fdevicetype, finterfacetype, frelateddatakeys, 
+      fdatakey, falarmreasoncode, falarmreason, 
+      falarmadvice, falarmfollow, inserttime, 
+      fislook, fequmentstate, falarmidentification, 
+      fdealtime, falarmreasonafter, freasonpeople, 
+      freasontime, frootuinkey, falarmreasoncodeafter, 
+      falarmadviceafter, fispeoplesure, fmonitoritem, 
+      ffaultlocation, fqudevicetypeid, fobstaclephenomenonid, 
+      freasonlocationid, flevelpromotemsg)
+    values (#{funikey,jdbcType=VARCHAR}, #{falarmtime,jdbcType=TIMESTAMP}, #{fstationcode,jdbcType=VARCHAR}, 
+      #{falarmdevice,jdbcType=VARCHAR}, #{fstationid,jdbcType=INTEGER}, #{falarmcode,jdbcType=INTEGER}, 
+      #{flevel,jdbcType=INTEGER}, #{fcontent,jdbcType=VARCHAR}, #{frecovertime,jdbcType=TIMESTAMP}, 
+      #{fisrecover,jdbcType=INTEGER}, #{fishandle,jdbcType=INTEGER}, #{fisfix,jdbcType=INTEGER}, 
+      #{fdevicetype,jdbcType=INTEGER}, #{finterfacetype,jdbcType=INTEGER}, #{frelateddatakeys,jdbcType=VARCHAR}, 
+      #{fdatakey,jdbcType=INTEGER}, #{falarmreasoncode,jdbcType=INTEGER}, #{falarmreason,jdbcType=VARCHAR}, 
+      #{falarmadvice,jdbcType=VARCHAR}, #{falarmfollow,jdbcType=INTEGER}, #{inserttime,jdbcType=TIMESTAMP}, 
+      #{fislook,jdbcType=INTEGER}, #{fequmentstate,jdbcType=INTEGER}, #{falarmidentification,jdbcType=INTEGER}, 
+      #{fdealtime,jdbcType=TIMESTAMP}, #{falarmreasonafter,jdbcType=VARCHAR}, #{freasonpeople,jdbcType=VARCHAR}, 
+      #{freasontime,jdbcType=TIMESTAMP}, #{frootuinkey,jdbcType=VARCHAR}, #{falarmreasoncodeafter,jdbcType=INTEGER}, 
+      #{falarmadviceafter,jdbcType=VARCHAR}, #{fispeoplesure,jdbcType=INTEGER}, #{fmonitoritem,jdbcType=INTEGER}, 
+      #{ffaultlocation,jdbcType=VARCHAR}, #{fqudevicetypeid,jdbcType=INTEGER}, #{fobstaclephenomenonid,jdbcType=INTEGER}, 
+      #{freasonlocationid,jdbcType=INTEGER}, #{flevelpromotemsg,jdbcType=VARCHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="com.ht.healthindex.dataobject.HistoryAlarmDO">
+    insert into t_app_history_alarm
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="funikey != null">
+        funikey,
+      </if>
+      <if test="falarmtime != null">
+        falarmtime,
+      </if>
+      <if test="fstationcode != null">
+        fstationcode,
+      </if>
+      <if test="falarmdevice != null">
+        falarmdevice,
+      </if>
+      <if test="fstationid != null">
+        fstationid,
+      </if>
+      <if test="falarmcode != null">
+        falarmcode,
+      </if>
+      <if test="flevel != null">
+        flevel,
+      </if>
+      <if test="fcontent != null">
+        fcontent,
+      </if>
+      <if test="frecovertime != null">
+        frecovertime,
+      </if>
+      <if test="fisrecover != null">
+        fisrecover,
+      </if>
+      <if test="fishandle != null">
+        fishandle,
+      </if>
+      <if test="fisfix != null">
+        fisfix,
+      </if>
+      <if test="fdevicetype != null">
+        fdevicetype,
+      </if>
+      <if test="finterfacetype != null">
+        finterfacetype,
+      </if>
+      <if test="frelateddatakeys != null">
+        frelateddatakeys,
+      </if>
+      <if test="fdatakey != null">
+        fdatakey,
+      </if>
+      <if test="falarmreasoncode != null">
+        falarmreasoncode,
+      </if>
+      <if test="falarmreason != null">
+        falarmreason,
+      </if>
+      <if test="falarmadvice != null">
+        falarmadvice,
+      </if>
+      <if test="falarmfollow != null">
+        falarmfollow,
+      </if>
+      <if test="inserttime != null">
+        inserttime,
+      </if>
+      <if test="fislook != null">
+        fislook,
+      </if>
+      <if test="fequmentstate != null">
+        fequmentstate,
+      </if>
+      <if test="falarmidentification != null">
+        falarmidentification,
+      </if>
+      <if test="fdealtime != null">
+        fdealtime,
+      </if>
+      <if test="falarmreasonafter != null">
+        falarmreasonafter,
+      </if>
+      <if test="freasonpeople != null">
+        freasonpeople,
+      </if>
+      <if test="freasontime != null">
+        freasontime,
+      </if>
+      <if test="frootuinkey != null">
+        frootuinkey,
+      </if>
+      <if test="falarmreasoncodeafter != null">
+        falarmreasoncodeafter,
+      </if>
+      <if test="falarmadviceafter != null">
+        falarmadviceafter,
+      </if>
+      <if test="fispeoplesure != null">
+        fispeoplesure,
+      </if>
+      <if test="fmonitoritem != null">
+        fmonitoritem,
+      </if>
+      <if test="ffaultlocation != null">
+        ffaultlocation,
+      </if>
+      <if test="fqudevicetypeid != null">
+        fqudevicetypeid,
+      </if>
+      <if test="fobstaclephenomenonid != null">
+        fobstaclephenomenonid,
+      </if>
+      <if test="freasonlocationid != null">
+        freasonlocationid,
+      </if>
+      <if test="flevelpromotemsg != null">
+        flevelpromotemsg,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="funikey != null">
+        #{funikey,jdbcType=VARCHAR},
+      </if>
+      <if test="falarmtime != null">
+        #{falarmtime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="fstationcode != null">
+        #{fstationcode,jdbcType=VARCHAR},
+      </if>
+      <if test="falarmdevice != null">
+        #{falarmdevice,jdbcType=VARCHAR},
+      </if>
+      <if test="fstationid != null">
+        #{fstationid,jdbcType=INTEGER},
+      </if>
+      <if test="falarmcode != null">
+        #{falarmcode,jdbcType=INTEGER},
+      </if>
+      <if test="flevel != null">
+        #{flevel,jdbcType=INTEGER},
+      </if>
+      <if test="fcontent != null">
+        #{fcontent,jdbcType=VARCHAR},
+      </if>
+      <if test="frecovertime != null">
+        #{frecovertime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="fisrecover != null">
+        #{fisrecover,jdbcType=INTEGER},
+      </if>
+      <if test="fishandle != null">
+        #{fishandle,jdbcType=INTEGER},
+      </if>
+      <if test="fisfix != null">
+        #{fisfix,jdbcType=INTEGER},
+      </if>
+      <if test="fdevicetype != null">
+        #{fdevicetype,jdbcType=INTEGER},
+      </if>
+      <if test="finterfacetype != null">
+        #{finterfacetype,jdbcType=INTEGER},
+      </if>
+      <if test="frelateddatakeys != null">
+        #{frelateddatakeys,jdbcType=VARCHAR},
+      </if>
+      <if test="fdatakey != null">
+        #{fdatakey,jdbcType=INTEGER},
+      </if>
+      <if test="falarmreasoncode != null">
+        #{falarmreasoncode,jdbcType=INTEGER},
+      </if>
+      <if test="falarmreason != null">
+        #{falarmreason,jdbcType=VARCHAR},
+      </if>
+      <if test="falarmadvice != null">
+        #{falarmadvice,jdbcType=VARCHAR},
+      </if>
+      <if test="falarmfollow != null">
+        #{falarmfollow,jdbcType=INTEGER},
+      </if>
+      <if test="inserttime != null">
+        #{inserttime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="fislook != null">
+        #{fislook,jdbcType=INTEGER},
+      </if>
+      <if test="fequmentstate != null">
+        #{fequmentstate,jdbcType=INTEGER},
+      </if>
+      <if test="falarmidentification != null">
+        #{falarmidentification,jdbcType=INTEGER},
+      </if>
+      <if test="fdealtime != null">
+        #{fdealtime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="falarmreasonafter != null">
+        #{falarmreasonafter,jdbcType=VARCHAR},
+      </if>
+      <if test="freasonpeople != null">
+        #{freasonpeople,jdbcType=VARCHAR},
+      </if>
+      <if test="freasontime != null">
+        #{freasontime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="frootuinkey != null">
+        #{frootuinkey,jdbcType=VARCHAR},
+      </if>
+      <if test="falarmreasoncodeafter != null">
+        #{falarmreasoncodeafter,jdbcType=INTEGER},
+      </if>
+      <if test="falarmadviceafter != null">
+        #{falarmadviceafter,jdbcType=VARCHAR},
+      </if>
+      <if test="fispeoplesure != null">
+        #{fispeoplesure,jdbcType=INTEGER},
+      </if>
+      <if test="fmonitoritem != null">
+        #{fmonitoritem,jdbcType=INTEGER},
+      </if>
+      <if test="ffaultlocation != null">
+        #{ffaultlocation,jdbcType=VARCHAR},
+      </if>
+      <if test="fqudevicetypeid != null">
+        #{fqudevicetypeid,jdbcType=INTEGER},
+      </if>
+      <if test="fobstaclephenomenonid != null">
+        #{fobstaclephenomenonid,jdbcType=INTEGER},
+      </if>
+      <if test="freasonlocationid != null">
+        #{freasonlocationid,jdbcType=INTEGER},
+      </if>
+      <if test="flevelpromotemsg != null">
+        #{flevelpromotemsg,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.ht.healthindex.dataobject.HistoryAlarmDO">
+    update t_app_history_alarm
+    <set>
+      <if test="fstationcode != null">
+        fstationcode = #{fstationcode,jdbcType=VARCHAR},
+      </if>
+      <if test="falarmdevice != null">
+        falarmdevice = #{falarmdevice,jdbcType=VARCHAR},
+      </if>
+      <if test="fstationid != null">
+        fstationid = #{fstationid,jdbcType=INTEGER},
+      </if>
+      <if test="falarmcode != null">
+        falarmcode = #{falarmcode,jdbcType=INTEGER},
+      </if>
+      <if test="flevel != null">
+        flevel = #{flevel,jdbcType=INTEGER},
+      </if>
+      <if test="fcontent != null">
+        fcontent = #{fcontent,jdbcType=VARCHAR},
+      </if>
+      <if test="frecovertime != null">
+        frecovertime = #{frecovertime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="fisrecover != null">
+        fisrecover = #{fisrecover,jdbcType=INTEGER},
+      </if>
+      <if test="fishandle != null">
+        fishandle = #{fishandle,jdbcType=INTEGER},
+      </if>
+      <if test="fisfix != null">
+        fisfix = #{fisfix,jdbcType=INTEGER},
+      </if>
+      <if test="fdevicetype != null">
+        fdevicetype = #{fdevicetype,jdbcType=INTEGER},
+      </if>
+      <if test="finterfacetype != null">
+        finterfacetype = #{finterfacetype,jdbcType=INTEGER},
+      </if>
+      <if test="frelateddatakeys != null">
+        frelateddatakeys = #{frelateddatakeys,jdbcType=VARCHAR},
+      </if>
+      <if test="fdatakey != null">
+        fdatakey = #{fdatakey,jdbcType=INTEGER},
+      </if>
+      <if test="falarmreasoncode != null">
+        falarmreasoncode = #{falarmreasoncode,jdbcType=INTEGER},
+      </if>
+      <if test="falarmreason != null">
+        falarmreason = #{falarmreason,jdbcType=VARCHAR},
+      </if>
+      <if test="falarmadvice != null">
+        falarmadvice = #{falarmadvice,jdbcType=VARCHAR},
+      </if>
+      <if test="falarmfollow != null">
+        falarmfollow = #{falarmfollow,jdbcType=INTEGER},
+      </if>
+      <if test="inserttime != null">
+        inserttime = #{inserttime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="fislook != null">
+        fislook = #{fislook,jdbcType=INTEGER},
+      </if>
+      <if test="fequmentstate != null">
+        fequmentstate = #{fequmentstate,jdbcType=INTEGER},
+      </if>
+      <if test="falarmidentification != null">
+        falarmidentification = #{falarmidentification,jdbcType=INTEGER},
+      </if>
+      <if test="fdealtime != null">
+        fdealtime = #{fdealtime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="falarmreasonafter != null">
+        falarmreasonafter = #{falarmreasonafter,jdbcType=VARCHAR},
+      </if>
+      <if test="freasonpeople != null">
+        freasonpeople = #{freasonpeople,jdbcType=VARCHAR},
+      </if>
+      <if test="freasontime != null">
+        freasontime = #{freasontime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="frootuinkey != null">
+        frootuinkey = #{frootuinkey,jdbcType=VARCHAR},
+      </if>
+      <if test="falarmreasoncodeafter != null">
+        falarmreasoncodeafter = #{falarmreasoncodeafter,jdbcType=INTEGER},
+      </if>
+      <if test="falarmadviceafter != null">
+        falarmadviceafter = #{falarmadviceafter,jdbcType=VARCHAR},
+      </if>
+      <if test="fispeoplesure != null">
+        fispeoplesure = #{fispeoplesure,jdbcType=INTEGER},
+      </if>
+      <if test="fmonitoritem != null">
+        fmonitoritem = #{fmonitoritem,jdbcType=INTEGER},
+      </if>
+      <if test="ffaultlocation != null">
+        ffaultlocation = #{ffaultlocation,jdbcType=VARCHAR},
+      </if>
+      <if test="fqudevicetypeid != null">
+        fqudevicetypeid = #{fqudevicetypeid,jdbcType=INTEGER},
+      </if>
+      <if test="fobstaclephenomenonid != null">
+        fobstaclephenomenonid = #{fobstaclephenomenonid,jdbcType=INTEGER},
+      </if>
+      <if test="freasonlocationid != null">
+        freasonlocationid = #{freasonlocationid,jdbcType=INTEGER},
+      </if>
+      <if test="flevelpromotemsg != null">
+        flevelpromotemsg = #{flevelpromotemsg,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where funikey = #{funikey,jdbcType=VARCHAR}
+      and falarmtime = #{falarmtime,jdbcType=TIMESTAMP}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.ht.healthindex.dataobject.HistoryAlarmDO">
+    update t_app_history_alarm
+    set fstationcode = #{fstationcode,jdbcType=VARCHAR},
+      falarmdevice = #{falarmdevice,jdbcType=VARCHAR},
+      fstationid = #{fstationid,jdbcType=INTEGER},
+      falarmcode = #{falarmcode,jdbcType=INTEGER},
+      flevel = #{flevel,jdbcType=INTEGER},
+      fcontent = #{fcontent,jdbcType=VARCHAR},
+      frecovertime = #{frecovertime,jdbcType=TIMESTAMP},
+      fisrecover = #{fisrecover,jdbcType=INTEGER},
+      fishandle = #{fishandle,jdbcType=INTEGER},
+      fisfix = #{fisfix,jdbcType=INTEGER},
+      fdevicetype = #{fdevicetype,jdbcType=INTEGER},
+      finterfacetype = #{finterfacetype,jdbcType=INTEGER},
+      frelateddatakeys = #{frelateddatakeys,jdbcType=VARCHAR},
+      fdatakey = #{fdatakey,jdbcType=INTEGER},
+      falarmreasoncode = #{falarmreasoncode,jdbcType=INTEGER},
+      falarmreason = #{falarmreason,jdbcType=VARCHAR},
+      falarmadvice = #{falarmadvice,jdbcType=VARCHAR},
+      falarmfollow = #{falarmfollow,jdbcType=INTEGER},
+      inserttime = #{inserttime,jdbcType=TIMESTAMP},
+      fislook = #{fislook,jdbcType=INTEGER},
+      fequmentstate = #{fequmentstate,jdbcType=INTEGER},
+      falarmidentification = #{falarmidentification,jdbcType=INTEGER},
+      fdealtime = #{fdealtime,jdbcType=TIMESTAMP},
+      falarmreasonafter = #{falarmreasonafter,jdbcType=VARCHAR},
+      freasonpeople = #{freasonpeople,jdbcType=VARCHAR},
+      freasontime = #{freasontime,jdbcType=TIMESTAMP},
+      frootuinkey = #{frootuinkey,jdbcType=VARCHAR},
+      falarmreasoncodeafter = #{falarmreasoncodeafter,jdbcType=INTEGER},
+      falarmadviceafter = #{falarmadviceafter,jdbcType=VARCHAR},
+      fispeoplesure = #{fispeoplesure,jdbcType=INTEGER},
+      fmonitoritem = #{fmonitoritem,jdbcType=INTEGER},
+      ffaultlocation = #{ffaultlocation,jdbcType=VARCHAR},
+      fqudevicetypeid = #{fqudevicetypeid,jdbcType=INTEGER},
+      fobstaclephenomenonid = #{fobstaclephenomenonid,jdbcType=INTEGER},
+      freasonlocationid = #{freasonlocationid,jdbcType=INTEGER},
+      flevelpromotemsg = #{flevelpromotemsg,jdbcType=VARCHAR}
+    where funikey = #{funikey,jdbcType=VARCHAR}
+      and falarmtime = #{falarmtime,jdbcType=TIMESTAMP}
+  </update>
+</mapper>

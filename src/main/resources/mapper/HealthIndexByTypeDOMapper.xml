@@ -1,0 +1,291 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ht.healthindex.dao.HealthIndexByTypeDOMapper">
+  <resultMap id="BaseResultMap" type="com.ht.healthindex.dataobject.HealthIndexByTypeDO">
+    <id column="id" jdbcType="INTEGER" property="id" />
+    <result column="device_id" jdbcType="INTEGER" property="deviceId" />
+    <result column="device_name" jdbcType="VARCHAR" property="deviceName" />
+    <result column="device_type" jdbcType="VARCHAR" property="deviceType" />
+    <result column="station_id" jdbcType="INTEGER" property="stationId" />
+    <result column="station_name" jdbcType="VARCHAR" property="stationName" />
+    <result column="health_index" jdbcType="DECIMAL" property="healthIndex" />
+    <result column="life_left" jdbcType="INTEGER" property="lifeLeft" />
+    <result column="create_date" jdbcType="TIMESTAMP" property="createDate" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    id, device_id, device_name, device_type, station_id, station_name, health_index, 
+    life_left, create_date
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from single_device_health_index
+    where id = #{id,jdbcType=INTEGER}
+  </select>
+
+  <select id="listHealthIndex" resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List" />
+    from single_device_health_index
+  </select>
+
+
+
+  <select id="listHealthIndexLatest" resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List" />
+    from
+    <trim prefix="(" suffix=")" >
+      select
+      <include refid="Base_Column_List" />
+      from single_device_health_index
+      order by create_date desc
+      limit 10000
+    </trim>
+    as temp_table group by temp_table.device_id
+  </select>
+
+
+  <select id="listHealthIndexLatestByCondition" parameterType="com.ht.healthindex.dataobject.HealthIndexByTypeDO" resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List" />
+    from
+    <trim prefix="(" suffix=")">
+      select
+      <include refid="Base_Column_List" />
+      from single_device_health_index
+      <where>
+        <if test="deviceId != null">
+          device_id = #{deviceId,jdbcType=INTEGER}
+        </if>
+        <if test="deviceName != null">
+          and device_name = #{deviceName,jdbcType=VARCHAR}
+        </if>
+        <if test="deviceType != null">
+          and device_type = #{deviceType,jdbcType=VARCHAR}
+        </if>
+        <if test="stationId != null">
+          and station_id = #{stationId,jdbcType=INTEGER}
+        </if>
+        <if test="stationName != null">
+          and station_name = #{stationName,jdbcType=VARCHAR}
+        </if>
+        <if test="healthIndex != null">
+          and health_index = #{healthIndex,jdbcType=DECIMAL}
+        </if>
+        <if test="lifeLeft != null">
+          and life_left = #{lifeLeft,jdbcType=INTEGER}
+        </if>
+        <if test="createDate != null">
+          and create_date >= #{createDate,jdbcType=TIMESTAMP}
+          and to_days(create_date)-to_days(#{createDate,jdbcType=TIMESTAMP}) &lt;= 1
+        </if>
+      </where>
+
+      order by create_date desc
+      limit 10000
+    </trim>
+    as temp_table group by temp_table.device_id
+  </select>
+
+  <select id="listHealthIndexLatest30Days" parameterType="com.ht.healthindex.dataobject.HealthIndexByTypeDO" resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List" />
+    from
+    <trim prefix="(" suffix=")">
+      select
+      <include refid="Base_Column_List" />
+      from single_device_health_index
+      <where>
+        <if test="deviceId != null">
+          device_id = #{deviceId,jdbcType=INTEGER}
+        </if>
+        <if test="deviceName != null">
+          and device_name = #{deviceName,jdbcType=VARCHAR}
+        </if>
+        <if test="deviceType != null">
+          and device_type = #{deviceType,jdbcType=VARCHAR}
+        </if>
+        <if test="stationId != null">
+          and station_id = #{stationId,jdbcType=INTEGER}
+        </if>
+        <if test="stationName != null">
+          and station_name = #{stationName,jdbcType=VARCHAR}
+        </if>
+        <if test="healthIndex != null">
+          and health_index = #{healthIndex,jdbcType=DECIMAL}
+        </if>
+        <if test="lifeLeft != null">
+          and life_left = #{lifeLeft,jdbcType=INTEGER}
+        </if>
+        <if test="createDate != null">
+          and to_days(create_date) &lt;= to_days(#{createDate}) + 1
+          and to_days(create_date) &gt;= to_days(#{createDate,jdbcType=TIMESTAMP}) - 29
+        </if>
+      </where>
+
+      order by create_date desc
+      limit 10000
+    </trim>
+    as temp_table group by temp_table.create_date
+  </select>
+
+  <select id="listHealthIndexByCondition" parameterType="com.ht.healthindex.dataobject.HealthIndexByTypeDO" resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List" />
+    from single_device_health_index
+    <where>
+    <if test="deviceId != null">
+      device_id = #{deviceId,jdbcType=INTEGER}
+    </if>
+    <if test="deviceName != null">
+      and device_name = #{deviceName,jdbcType=VARCHAR}
+    </if>
+    <if test="deviceType != null">
+      and device_type = #{deviceType,jdbcType=VARCHAR}
+    </if>
+    <if test="stationId != null">
+      and station_id = #{stationId,jdbcType=INTEGER}
+    </if>
+    <if test="stationName != null">
+      and station_name = #{stationName,jdbcType=VARCHAR}
+    </if>
+    <if test="healthIndex != null">
+      and health_index = #{healthIndex,jdbcType=DECIMAL}
+    </if>
+    <if test="lifeLeft != null">
+      and life_left = #{lifeLeft,jdbcType=INTEGER}
+    </if>
+    <if test="createDate != null">
+      and create_date >= #{createDate,jdbcType=TIMESTAMP}
+      and to_days(create_date)-to_days(#{createDate,jdbcType=TIMESTAMP}) &lt;= 1
+    </if>
+    </where>
+  </select>
+
+  <select id="listHealthIndexByDate" resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List" />
+    from single_device_health_index
+    where create_date >= #{date,jdbcType=TIMESTAMP}
+    and to_days(create_date)-to_days(#{date}) &lt;= 1
+  </select>
+
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    delete from single_device_health_index
+    where id = #{id,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="com.ht.healthindex.dataobject.HealthIndexByTypeDO">
+    insert into single_device_health_index (id, device_id, device_name, 
+      device_type, station_id, station_name, 
+      health_index, life_left, create_date
+      )
+    values (#{id,jdbcType=INTEGER}, #{deviceId,jdbcType=INTEGER}, #{deviceName,jdbcType=VARCHAR}, 
+      #{deviceType,jdbcType=VARCHAR}, #{stationId,jdbcType=INTEGER}, #{stationName,jdbcType=VARCHAR}, 
+      #{healthIndex,jdbcType=DECIMAL}, #{lifeLeft,jdbcType=INTEGER}, #{createDate,jdbcType=TIMESTAMP}
+      )
+  </insert>
+  <insert id="insertSelective" parameterType="com.ht.healthindex.dataobject.HealthIndexByTypeDO">
+    insert into single_device_health_index
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        id,
+      </if>
+      <if test="deviceId != null">
+        device_id,
+      </if>
+      <if test="deviceName != null">
+        device_name,
+      </if>
+      <if test="deviceType != null">
+        device_type,
+      </if>
+      <if test="stationId != null">
+        station_id,
+      </if>
+      <if test="stationName != null">
+        station_name,
+      </if>
+      <if test="healthIndex != null">
+        health_index,
+      </if>
+      <if test="lifeLeft != null">
+        life_left,
+      </if>
+      <if test="createDate != null">
+        create_date,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        #{id,jdbcType=INTEGER},
+      </if>
+      <if test="deviceId != null">
+        #{deviceId,jdbcType=INTEGER},
+      </if>
+      <if test="deviceName != null">
+        #{deviceName,jdbcType=VARCHAR},
+      </if>
+      <if test="deviceType != null">
+        #{deviceType,jdbcType=VARCHAR},
+      </if>
+      <if test="stationId != null">
+        #{stationId,jdbcType=INTEGER},
+      </if>
+      <if test="stationName != null">
+        #{stationName,jdbcType=VARCHAR},
+      </if>
+      <if test="healthIndex != null">
+        #{healthIndex,jdbcType=DECIMAL},
+      </if>
+      <if test="lifeLeft != null">
+        #{lifeLeft,jdbcType=INTEGER},
+      </if>
+      <if test="createDate != null">
+        #{createDate,jdbcType=TIMESTAMP},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.ht.healthindex.dataobject.HealthIndexByTypeDO">
+    update single_device_health_index
+    <set>
+      <if test="deviceId != null">
+        device_id = #{deviceId,jdbcType=INTEGER},
+      </if>
+      <if test="deviceName != null">
+        device_name = #{deviceName,jdbcType=VARCHAR},
+      </if>
+      <if test="deviceType != null">
+        device_type = #{deviceType,jdbcType=VARCHAR},
+      </if>
+      <if test="stationId != null">
+        station_id = #{stationId,jdbcType=INTEGER},
+      </if>
+      <if test="stationName != null">
+        station_name = #{stationName,jdbcType=VARCHAR},
+      </if>
+      <if test="healthIndex != null">
+        health_index = #{healthIndex,jdbcType=DECIMAL},
+      </if>
+      <if test="lifeLeft != null">
+        life_left = #{lifeLeft,jdbcType=INTEGER},
+      </if>
+      <if test="createDate != null">
+        create_date = #{createDate,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.ht.healthindex.dataobject.HealthIndexByTypeDO">
+    update single_device_health_index
+    set device_id = #{deviceId,jdbcType=INTEGER},
+      device_name = #{deviceName,jdbcType=VARCHAR},
+      device_type = #{deviceType,jdbcType=VARCHAR},
+      station_id = #{stationId,jdbcType=INTEGER},
+      station_name = #{stationName,jdbcType=VARCHAR},
+      health_index = #{healthIndex,jdbcType=DECIMAL},
+      life_left = #{lifeLeft,jdbcType=INTEGER},
+      create_date = #{createDate,jdbcType=TIMESTAMP}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+</mapper>

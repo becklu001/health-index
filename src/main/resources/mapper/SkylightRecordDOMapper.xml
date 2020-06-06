@@ -1,0 +1,155 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ht.healthindex.dao.SkylightRecordDOMapper">
+  <resultMap id="BaseResultMap" type="com.ht.healthindex.dataobject.SkylightRecordDO">
+  <id column="id" jdbcType="INTEGER" property="id" />
+  <result column="station_id" jdbcType="INTEGER" property="stationId" />
+  <result column="start_time" jdbcType="TIMESTAMP" property="startTime" />
+  <result column="end_time" jdbcType="TIMESTAMP" property="endTime" />
+  <result column="type" jdbcType="TINYINT" property="type" />
+  <result column="mode" jdbcType="TINYINT" property="mode" />
+  <result column="remarks" jdbcType="VARCHAR" property="remarks" />
+</resultMap>
+  <resultMap extends="BaseResultMap" id="ResultMapWithBLOBs" type="com.ht.healthindex.dataobject.SkylightRecordDO">
+    <result column="device_collection" jdbcType="LONGVARCHAR" property="deviceCollection" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    id, station_id, start_time, end_time, type, mode, remarks
+  </sql>
+  <sql id="Blob_Column_List">
+    device_collection
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="ResultMapWithBLOBs">
+    select 
+    <include refid="Base_Column_List" />
+    ,
+    <include refid="Blob_Column_List" />
+    from skylight_record
+    where id = #{id,jdbcType=INTEGER}
+  </select>
+
+  <select id="listByStationId" parameterType="java.lang.Integer" resultMap="ResultMapWithBLOBs">
+    select
+    <include refid="Base_Column_List" />
+    ,
+    <include refid="Blob_Column_List" />
+    from skylight_record
+    where station_id = #{stationId,jdbcType=INTEGER}
+  </select>
+
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    delete from skylight_record
+    where id = #{id,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="com.ht.healthindex.dataobject.SkylightRecordDO">
+    insert into skylight_record (id, station_id, start_time, 
+      end_time, type, mode, 
+      remarks, device_collection)
+    values (#{id,jdbcType=INTEGER}, #{stationId,jdbcType=INTEGER}, #{startTime,jdbcType=TIMESTAMP}, 
+      #{endTime,jdbcType=TIMESTAMP}, #{type,jdbcType=TINYINT}, #{mode,jdbcType=TINYINT}, 
+      #{remarks,jdbcType=VARCHAR}, #{deviceCollection,jdbcType=LONGVARCHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="com.ht.healthindex.dataobject.SkylightRecordDO">
+    insert into skylight_record
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        id,
+      </if>
+      <if test="stationId != null">
+        station_id,
+      </if>
+      <if test="startTime != null">
+        start_time,
+      </if>
+      <if test="endTime != null">
+        end_time,
+      </if>
+      <if test="type != null">
+        type,
+      </if>
+      <if test="mode != null">
+        mode,
+      </if>
+      <if test="remarks != null">
+        remarks,
+      </if>
+      <if test="deviceCollection != null">
+        device_collection,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        #{id,jdbcType=INTEGER},
+      </if>
+      <if test="stationId != null">
+        #{stationId,jdbcType=INTEGER},
+      </if>
+      <if test="startTime != null">
+        #{startTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="endTime != null">
+        #{endTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="type != null">
+        #{type,jdbcType=TINYINT},
+      </if>
+      <if test="mode != null">
+        #{mode,jdbcType=TINYINT},
+      </if>
+      <if test="remarks != null">
+        #{remarks,jdbcType=VARCHAR},
+      </if>
+      <if test="deviceCollection != null">
+        #{deviceCollection,jdbcType=LONGVARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.ht.healthindex.dataobject.SkylightRecordDO">
+    update skylight_record
+    <set>
+      <if test="stationId != null">
+        station_id = #{stationId,jdbcType=INTEGER},
+      </if>
+      <if test="startTime != null">
+        start_time = #{startTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="endTime != null">
+        end_time = #{endTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="type != null">
+        type = #{type,jdbcType=TINYINT},
+      </if>
+      <if test="mode != null">
+        mode = #{mode,jdbcType=TINYINT},
+      </if>
+      <if test="remarks != null">
+        remarks = #{remarks,jdbcType=VARCHAR},
+      </if>
+      <if test="deviceCollection != null">
+        device_collection = #{deviceCollection,jdbcType=LONGVARCHAR},
+      </if>
+    </set>
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKeyWithBLOBs" parameterType="com.ht.healthindex.dataobject.SkylightRecordDO">
+    update skylight_record
+    set station_id = #{stationId,jdbcType=INTEGER},
+      start_time = #{startTime,jdbcType=TIMESTAMP},
+      end_time = #{endTime,jdbcType=TIMESTAMP},
+      type = #{type,jdbcType=TINYINT},
+      mode = #{mode,jdbcType=TINYINT},
+      remarks = #{remarks,jdbcType=VARCHAR},
+      device_collection = #{deviceCollection,jdbcType=LONGVARCHAR}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.ht.healthindex.dataobject.SkylightRecordDO">
+    update skylight_record
+    set station_id = #{stationId,jdbcType=INTEGER},
+      start_time = #{startTime,jdbcType=TIMESTAMP},
+      end_time = #{endTime,jdbcType=TIMESTAMP},
+      type = #{type,jdbcType=TINYINT},
+      mode = #{mode,jdbcType=TINYINT},
+      remarks = #{remarks,jdbcType=VARCHAR}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+</mapper>

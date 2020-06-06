@@ -1,0 +1,371 @@
+<!DOCTYPE html>
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <!--<link  rel="stylesheet"  href="../common/layui/css/layui.css" >-->
+
+    <link rel="stylesheet" href="layui/css/layui.css" />
+    <script type="text/javascript" src="layui/layui.js" ></script>
+    <script src="https://how2j.cn/study/js/chartjs/2.8.0/chart.min.js"></script>
+
+    <style>
+        #topPanel{
+            width: auto;
+            height: 300px;
+            /*border: 1px solid red;*/
+        }
+        #topLeftPanel{
+            width: 600px;
+            /*height: 300px;*/
+            float: left;
+            /*background: yellow;*/
+        }
+        .cakeDiv {
+            display: none;
+        }
+
+/*        #轨道电路{
+            float: left;
+        }
+        #道岔{
+            float: left;
+        }*/
+
+        #topRightPanel{
+            width: 600px;
+            height: 300px;
+            float: right;
+            background: deepskyblue;
+        }
+        #listHealthIndexTable{
+
+        }
+        #inline1{
+            margin-bottom: 0px;
+        }
+        #addDeviceBtn{
+            height: 32px;
+        }
+    </style>
+</head>
+<body>
+    <div id="topPanel">
+        <div id="topLeftPanel">
+            <div >
+                <div class = "bar-div" id="myBarDiv">
+                    <canvas  class="bar-canvas" id="barCanvas">
+                        轨道饼图
+                    </canvas>
+                </div>
+            </div>
+        </div><!--topLeftPanel-->
+        <div id="topRightPanel"></div>
+    </div>
+    <hr>
+    <div id="dataPanel">
+        <form class="layui-form" id="searchForm">
+            <div class="layui-form-item">
+                <div class="layui-inline" id="inline1">
+                    <label class="layui-form-label">线路名称</label>
+                    <div class="layui-input-inline">
+                        <select name="lineName" id="channelUid">
+                            <option value="">全部</option>
+                            <!--<option th:each="b,bStat:${brands}" th:value="${b.uid}">[[${b?.channelName}]]</option>-->
+                            <option>长白线</option>
+                            <option>测试一线</option>
+                            <option>测试二线</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="layui-inline" id="inline1">
+                    <label class="layui-form-label">车间名称</label>
+                    <div class="layui-input-inline">
+                        <select name="workshopName" id="channelUid">
+                            <option value="">全部</option>
+                            <option>长北车间</option>
+                            <option>松原车间</option>
+                            <option>白城车间</option>
+                            <option>乌兰浩特车间</option>
+                        </select>
+                    </div>
+                </div>
+
+                <button type="button"  id="addDeviceBtn" th:id="addDeviceBtn" class="layui-btn layui-btn-normal">
+                    查询
+                </button>
+
+            </div>
+        </form>
+
+        <table id="listStationHealthIndexTable" lay-filter="listStationHealthIndexTable"></table>
+    </div>
+
+</body>
+
+<script>
+    layui.use(['jquery','form','table','layer'],function () {
+        var table = layui.table,layer = layui.layer,$ = layui.jquery,form = layui.form;
+        var baseUrl = "/device";
+
+        var deviceInfoList = table.render({
+            elem: '#listStationHealthIndexTable'
+            ,id:'listStationHealthIndexTable'
+            ,height:300
+            ,method:'get'
+
+//            数据接口url
+            ,url:'/ajaxStationHealthIndex'
+            ,page:{limit:30}
+            ,request:{
+                pageName:'page'
+                ,limitName:'number'
+            }
+
+            ,parseData:function (res) {
+//                data-----page
+                console.log(res);
+                return {
+                    "code":"000"
+                    ,"msg": res.status
+                    ,"count": res.data.total
+                    ,"data": res.data.list
+                }
+            }
+
+            ,cols: [
+                [
+                    {type:'numbers', fixed: 'left', width:60},
+
+                    ,{field: 'uid', hide:true}
+                    ,{field: 'id', title: 'ID', width:120,align: 'center'}
+                    ,{field: 'lineName', title: '线路名称', width:120,align: 'center'}
+                    ,{field: 'workshopName', title: '车间名称', width:120,align: 'center'}
+                    ,{field: 'stationId', title: '车站ID', width:120,align: 'center'}
+                    ,{field: 'stationName', title: '车站名称', width:120,align: 'center'}
+//                    ,{field: 'deviceId', title: '设备ID', width:120,align: 'center'}
+//                    ,{field: 'deviceName', title: '设备名称', width:120,align: 'center'}
+//                    ,{field: 'deviceType', title: '设备类型', width:120,align: 'center'}
+                    ,{field: 'healthIndex', title: '健康指数', width:120,align: 'center'}
+                    ,{field: 'healthIndex', title: '健康状态', width:120,align: 'center',templet:function (d) {
+                            if(d.healthIndex >= 85){
+//                                console.log(d);
+                                return "健康";
+                            }else if(d.healthIndex >= 70){
+                                return "亚健康";
+                            }else if(d.healthIndex >= 60){
+                                return "异常";
+                            }else if(d.healthIndex >= 40){
+                                return "病态";
+                            }else {
+                                return "故障";
+                            }
+
+                }
+                        }
+                    ,{field: 'createDate', title: '采集时间', width:150,align: 'center',
+                    templet : "<div>{{layui.util.toDateString(d.createDate, 'yyyy年MM月dd日 HH:mm:ss')}}</div>"}
+                    ,{fixed: 'right', width: 280,field: 'toolbar', title: '操作',align: 'center', templet: "#barDemo"}
+                ]
+            ]
+
+        });
+
+        // 新增机具
+        $("#addDeviceBtn").click(function () {
+            TableReload();
+            init();
+        })
+
+        TableReload = function () {
+            console.log("shopInfoReload()...........");
+            deviceInfoList.reload({
+                where: CreateWhere()
+                ,page: {
+                    curr: 1
+                },done: function (res, curr, count) {
+                    this.where={};
+                }
+            })
+        }
+
+        CreateWhere = function () {
+            var data = {
+                lineName: $("select[name=lineName]").val()
+                ,workshopName: $("select[name=workshopName]").val()
+            };
+//            console.log(data);
+            return deleteEmptyProperties(data);
+        }
+
+        function deleteEmptyProperties(data){
+            for (var dataKey in data) {
+                if(data[dataKey] == "") delete data[dataKey]
+            }
+
+            return data;
+        }
+
+        table.on("tool(listStationHealthIndexTable)",function (obj){
+            console.log(obj);
+            var stationId = obj.data.stationId;
+//            var deviceId = obj.data.deviceId;
+            var stationName = obj.data.stationName;
+            if(obj.event == "view"){
+                var trendUrl = "/trend30DaysStation?stationId="+stationId+"&stationName="+stationName;
+
+                console.log("---------view----------");
+                layer.open({
+                    title:"历史趋势"
+                    ,type:2
+                    ,content: [trendUrl,'yes']
+                    ,area:["60%","50%"]
+//                    , area: ['80%', '90%']
+
+                });
+//                location.href = "/trend30Days";
+            }
+        });
+
+        function init() {
+            //绘制饼图
+            //比例数据和颜色
+//            console.log("cakeDiv init..............");
+            /*
+            * 初始化，先将所有饼图图示隐藏，只有选定车站查出数据之后，才进行显示
+            * */
+//            $(".bar-div").hide();
+            var e = {
+                lineName: $("select[name=lineName]").val()
+//                ,deviceType: $("select[name=deviceType]").val()
+            };
+
+            if(e.lineName == ""){
+                return;
+            }
+            console.log("========e=======");
+            console.log(e);
+
+            for (var dataKey in e) {
+                if(e[dataKey] == "") delete e[dataKey]
+            }
+
+//            console.log("----------e-----------");
+//            console.log(e);
+
+            $.ajax(
+                {
+                    type:"get",
+                    url:"/ajaxStationHealthIndexList",
+                    data: e,
+                    dataType:"json",
+                    async: false,
+                    success:function (data) {
+
+                        console.log("cakeDiv______init()");
+                        console.log(data);
+
+                        var content = data.data;
+                        var arrayStation = new Array();
+                        var arrayHealthIndex = new Array();
+                        var lineName = e.lineName;
+
+                        for (var dataKey in content) {
+                            var stationName = content[dataKey].stationName;
+//                            lineName = content[dataKey].lineName;
+                            console.log(content[dataKey].stationName);
+                            console.log(content[dataKey].healthIndex);
+                            arrayStation.push(content[dataKey].stationName);
+                            arrayHealthIndex.push(content[dataKey].healthIndex);
+                        }
+
+                            var ctx = document.getElementById('barCanvas').getContext('2d');
+                            var myChart = new Chart(ctx, {
+                                type: 'bar',
+                                data: {
+                                    labels: arrayStation,
+//                                    labels: ['红', '蓝', '黄', '绿', '紫', '橙'],
+
+                                    datasets: [{
+                                        label: '示例',
+                                        data: arrayHealthIndex,
+//                                        data: [12, 19, 3, 5, 0, 3],
+//                                        maxBarThickness: 2,
+//                                        barPercentage: 0.1,
+//                                        barThickness:20,
+//                                        minBarLength: 2,
+                                        borderColor:'blue',
+                                        backgroundColor:'skyBlue',
+                                        borderWidth: 1,
+                                    }]
+                                },
+                                options:{
+                                    scales:{
+                                        xAxes:[{
+                                            maxBarThickness: 20,
+                                        }]
+                                    },
+                                    title:{
+                                        text:lineName + '车站健康度柱状图',
+                                        display:true
+                                    },
+                                    legend:{
+                                        display:false,
+                                    }
+                                }
+                            });
+/*                            if(content[dataKey].deviceType == '轨道电路'){
+                                $("#guidaoDiv").show();
+                                var ctx = document.getElementById('轨道电路').getContext('2d');
+                                var myChart = new Chart(ctx, {
+                                    type: 'doughnut',
+                                    data: {
+                                        labels: ['健康', '亚健康', '异常', '病态', '故障'],
+                                        datasets: [{
+                                            label: '示例',
+                                            data: [content[dataKey].healthyCount,content[dataKey].subhealthyCount ,
+                                                content[dataKey].abnormalCount  , content[dataKey].morbidCount , content[dataKey].errorCount ],
+                                            borderColor:'lightGray',
+                                            backgroundColor:['LawnGreen','skyblue','LightYellow','Orange','Red'],
+                                            borderWidth: 1
+                                        }],
+                                    },
+                                    options:{
+                                        title:{
+                                            text:stationName+'轨道电路',
+                                            display: true,
+                                        },
+
+                                        legend:{
+                                            display: false,
+                                        },
+                                        animation:{
+                                            animateScale: true,
+                                        }
+                                    }
+                                });
+                            }*/
+
+
+                    },
+                    error:function () {
+
+                    }
+                }
+            )
+
+
+
+        }
+
+    });
+</script>
+
+<script type="text/html" id="barDemo">
+    <a class="layui-btn layui-btn-xs" lay-event="view">查看30日内趋势</a>
+    <!--<a class="layui-btn layui-btn-xs" lay-event="shopUp">维修建议</a>-->
+    <!--<a class="layui-btn layui-btn-xs" lay-event="shopDown">下架</a>-->
+</script>
+
+</html>
